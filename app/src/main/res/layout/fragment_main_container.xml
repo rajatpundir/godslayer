@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:layout_margin="0px" android:padding="0px">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_home"
+            android:visibility="visible">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentHome"
+                android:id="@+id/fragment_home" tools:layout="@layout/fragment_home"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_subscriptions"
+            android:visibility="gone">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentSubscriptions"
+                android:id="@+id/fragment_subscriptions" tools:layout="@layout/fragment_subscriptions"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_inbox"
+            android:visibility="gone">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentInbox"
+                android:id="@+id/fragment_inbox" tools:layout="@layout/fragment_inbox"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_library"
+            android:visibility="gone">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentLibrary"
+                android:id="@+id/fragment_library" tools:layout="@layout/fragment_library"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_downloads"
+            android:visibility="gone">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentDownloads"
+                android:id="@+id/fragment_downloads" tools:layout="@layout/fragment_downloads"/>
+    </LinearLayout>
+</LinearLayout>

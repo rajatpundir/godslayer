@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <Button
+            android:text="Home"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home" android:layout_weight="1"
+            tools:text="Home" android:textSize="10sp"/>
+    <Button
+            android:text="Subscriptions"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_subscriptions" android:layout_weight="1"
+            android:textSize="12sp"/>
+    <Button
+            android:text="Inbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_inbox" android:layout_weight="1"/>
+    <Button
+            android:text="Library"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_library" android:layout_weight="1"/>
+    <Button
+            android:text="Downloads"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_downloads" android:layout_weight="1"/>
+</LinearLayout>
