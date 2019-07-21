@@ -10,7 +10,7 @@
             android:visibility="visible">
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentHome"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Fragment.FragmentHome"
                 android:id="@+id/fragment_home" tools:layout="@layout/fragment_home"/>
     </LinearLayout>
     <LinearLayout
@@ -20,7 +20,7 @@
             android:visibility="gone">
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentSubscriptions"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Fragment.FragmentSubscriptions"
                 android:id="@+id/fragment_subscriptions" tools:layout="@layout/fragment_subscriptions"/>
     </LinearLayout>
     <LinearLayout
@@ -30,7 +30,7 @@
             android:visibility="gone">
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentInbox"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Fragment.FragmentInbox"
                 android:id="@+id/fragment_inbox" tools:layout="@layout/fragment_inbox"/>
     </LinearLayout>
     <LinearLayout
@@ -40,7 +40,7 @@
             android:visibility="gone">
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentLibrary"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Fragment.FragmentLibrary"
                 android:id="@+id/fragment_library" tools:layout="@layout/fragment_library"/>
     </LinearLayout>
     <LinearLayout
@@ -50,7 +50,7 @@
             android:visibility="gone">
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.FragmentDownloads"
+                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Fragment.FragmentDownloads"
                 android:id="@+id/fragment_downloads" tools:layout="@layout/fragment_downloads"/>
     </LinearLayout>
 </LinearLayout>

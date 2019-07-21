@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <Button
-            android:text="Home View"
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button2"/>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+    />
+
 </LinearLayout>
