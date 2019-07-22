@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <Button
+            android:text="M"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_modules" android:layout_weight="1"/>
+    <Button
+            android:text="L"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_languages" android:layout_weight="1"/>
+    <Button
+            android:text="P1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_platforms" android:layout_weight="1"/>
+    <Button
+            android:text="P2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_publishers" android:layout_weight="1"/>
+    <Button
+            android:text="P3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_playlists" android:layout_weight="1"/>
+    <Button
+            android:text="E"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_episodes" android:layout_weight="1"/>
+    <Button
+            android:text="S"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:id="@+id/button_home_sources" android:layout_weight="1"/>
+</LinearLayout>

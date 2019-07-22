@@ -1,3 +1,0 @@
-package solutions.pundir.godslayer.Fragment
-
-interface FragmentCoordinator

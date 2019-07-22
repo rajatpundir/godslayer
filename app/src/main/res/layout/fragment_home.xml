@@ -3,12 +3,15 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_home"
+    <fragment
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeUpperBar" android:id="@+id/fragment_home_upper_bar"/>
+    <fragment
+            android:layout_weight="30"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-    />
-
+            android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer"
+            android:id="@+id/fragment_home_main_container"/>
 </LinearLayout>
