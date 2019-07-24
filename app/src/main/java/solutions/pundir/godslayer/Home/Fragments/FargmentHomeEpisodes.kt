@@ -52,11 +52,14 @@ class FargmentHomeEpisodes : Fragment() {
             uiThread {
                 var linearLayoutManager = LinearLayoutManager(context)
                 recycler_view_home_episodes.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterEpisodes(context, items, appStateHome)
+                val adapter = RecycleViewAdapterEpisodes(context, items, appStateHome, this@FargmentHomeEpisodes)
                 recycler_view_home_episodes.adapter = adapter
             }
         }
-        callback.callback_from_child_fragment()
+    }
+
+    fun update_sources_via_parent(mid : Long, parent_id : Long) {
+        callback.update_sources(mid, parent_id)
     }
 
 }

@@ -18,6 +18,8 @@ class FargmentHomeSources : Fragment() {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
+    internal var items = mutableListOf<Triple<Long, Long, String>>()
+    internal lateinit var adapter : RecycleViewAdapterSources
 
     fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
@@ -33,9 +35,16 @@ class FargmentHomeSources : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var linearLayoutManager = LinearLayoutManager(context)
+        recycler_view_home_sources.layoutManager = linearLayoutManager
+        adapter = RecycleViewAdapterSources(context, items, appStateHome)
+        recycler_view_home_sources.adapter = adapter
+    }
+
+    fun update_recycler_view(mid : Long, parent_id : Long) {
         doAsync {
-            val cursor = dbHandler.getSources()
-            var items = mutableListOf<Triple<Long, Long, String>>()
+            items.clear()
+            val cursor = dbHandler.getSourcesByParent(mid, parent_id)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
@@ -49,10 +58,8 @@ class FargmentHomeSources : Fragment() {
             }
             cursor.close()
             uiThread {
-                var linearLayoutManager = LinearLayoutManager(context)
-                recycler_view_home_sources.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterSources(context, items, appStateHome)
-                recycler_view_home_sources.adapter = adapter
+                adapter.notifyDataSetChanged()
+                // Pass the data back up the chain to generate the click event appropriately.
             }
         }
     }

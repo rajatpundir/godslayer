@@ -35,9 +35,19 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM LANGUAGES ORDER BY ID DESC", null)
     }
 
+    fun getLanguagesByParent(mid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM LANGUAGES WHERE MODULE_ID = ${mid} ORDER BY ID DESC", null)
+    }
+
     fun getPlatforms() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM PLATFORMS ORDER BY ID DESC", null)
+    }
+
+    fun getPlatformsByParent(mid : Long, parent_id : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PLATFORMS WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
     fun getPublishers() : Cursor? {
@@ -45,9 +55,19 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM PUBLISHERS ORDER BY ID DESC", null)
     }
 
+    fun getPublishersByParent(mid : Long, parent_id : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PUBLISHERS WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
+    }
+
     fun getPlaylists() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM PLAYLISTS ORDER BY ID ASC", null)
+    }
+
+    fun getPlaylistsByParent(mid : Long, parent_id : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PLAYLISTS WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
     fun getEpisodes() : Cursor? {
@@ -55,9 +75,19 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM EPISODES ORDER BY ID ASC", null)
     }
 
+    fun getEpisodesByParent(mid : Long, parent_id : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM EPISODES WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
+    }
+
     fun getSources() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM SOURCES ORDER BY ID DESC", null)
+    }
+
+    fun getSourcesByParent(mid : Long, parent_id : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM SOURCES WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
     fun getMagnetLinks() : Cursor? {

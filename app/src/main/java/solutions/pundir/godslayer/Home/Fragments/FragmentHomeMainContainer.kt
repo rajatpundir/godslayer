@@ -29,10 +29,6 @@ class FragmentHomeMainContainer : Fragment(), HomeCoordinator {
         return v
     }
 
-    override fun callback_from_child_fragment() {
-        println("Callback from child fragment to Fragment Home Main Container")
-    }
-
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
         if (childFragment is FargmentHomeModules) {
@@ -65,6 +61,34 @@ class FragmentHomeMainContainer : Fragment(), HomeCoordinator {
         }
     }
 
+    override fun update_modules() {
+        println("UPDATE MODULES")
+    }
 
+    override fun update_languages(mid: Long) {
+        println("UPDATE LANGUAGES")
+        stateHomeMainContainer.languages_fragment.update_recycler_view(mid)
+    }
+
+    override fun update_platforms(mid: Long, parent_id: Long) {
+        println("UPDATE PLATFORMS")
+    }
+
+    override fun update_publishers(mid: Long, parent_id: Long) {
+        println("UPDATE PUBLISHERS")
+    }
+
+    override fun update_playlists(mid: Long, parent_id: Long) {
+        println("UPDATE PLAYLISTS")
+    }
+
+    override fun update_episodes(mid: Long, parent_id: Long) {
+        println("UPDATE EPISODES")
+    }
+
+    override fun update_sources(mid: Long, parent_id: Long) {
+        println("UPDATE SOURCES")
+        stateHomeMainContainer.sources_fragment.update_recycler_view(mid, parent_id)
+    }
 
 }

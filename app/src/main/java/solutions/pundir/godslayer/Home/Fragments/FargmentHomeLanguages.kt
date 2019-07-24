@@ -18,6 +18,8 @@ class FargmentHomeLanguages : Fragment() {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
+    internal var items = mutableListOf<Triple<Long, Long, String>>()
+    internal lateinit var adapter : RecycleViewAdapterLanguages
 
     fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
@@ -33,9 +35,16 @@ class FargmentHomeLanguages : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var linearLayoutManager = LinearLayoutManager(context)
+        recycler_view_home_languages.layoutManager = linearLayoutManager
+        adapter = RecycleViewAdapterLanguages(context, items, appStateHome)
+        recycler_view_home_languages.adapter = adapter
+    }
+
+    fun update_recycler_view(mid : Long) {
         doAsync {
-            val cursor = dbHandler.getLanguages()
-            var items = mutableListOf<Triple<Long, Long, String>>()
+            items.clear()
+            val cursor = dbHandler.getLanguagesByParent(mid)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
@@ -49,10 +58,7 @@ class FargmentHomeLanguages : Fragment() {
             }
             cursor.close()
             uiThread {
-                var linearLayoutManager = LinearLayoutManager(context)
-                recycler_view_home_languages.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterLanguages(context, items, appStateHome)
-                recycler_view_home_languages.adapter = adapter
+                adapter.notifyDataSetChanged()
             }
         }
     }

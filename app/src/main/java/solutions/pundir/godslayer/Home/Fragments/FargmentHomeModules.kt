@@ -49,10 +49,14 @@ class FargmentHomeModules : Fragment() {
             uiThread {
                 var linearLayoutManager = LinearLayoutManager(context)
                 recycler_view_home_modules.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterModules(context, items, appStateHome)
+                val adapter = RecycleViewAdapterModules(context, items, appStateHome, this@FargmentHomeModules)
                 recycler_view_home_modules.adapter = adapter
             }
         }
+    }
+
+    fun update_languages_via_parent(parent_id : Long) {
+        callback.update_languages(parent_id)
     }
 
 
