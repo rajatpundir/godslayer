@@ -8,17 +8,18 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_home_main_container.*
 import kotlinx.android.synthetic.main.fragment_home_upper_bar.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer
-import solutions.pundir.godslayer.Home.Fragments.HomeCoordinator
+import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainerMainContainer
+import solutions.pundir.godslayer.Home.Fragments.FragmentHomeUpperBar
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
 val fragmentStateHome = StateFragmentsHome()
 var appStateHome = StateAppHome()
 
-class FragmentHome : Fragment(), AppCoordinator {
+class FragmentHome : Fragment(), HomeCoordinator {
     internal lateinit var callback : AppCoordinator
-    internal lateinit var dbHandler: GodslayerDBOpenHelper
+    internal lateinit var dbHandler : GodslayerDBOpenHelper
+    internal lateinit var upperBar: FragmentHomeUpperBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
@@ -32,13 +33,12 @@ class FragmentHome : Fragment(), AppCoordinator {
 
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
-        if (childFragment is FragmentHomeMainContainer) {
+        if (childFragment is FragmentHomeMainContainerMainContainer) {
             childFragment.callback_from_parent(this, dbHandler, appStateHome)
         }
-    }
-
-    override fun callback_from_child_fragment() {
-        println("Callback from child fragment to Fragment Home")
+        if (childFragment is FragmentHomeUpperBar) {
+            upperBar = childFragment
+        }
     }
 
     fun callback_from_parent(callback : AppCoordinator, dbHandler: GodslayerDBOpenHelper) {
@@ -47,6 +47,10 @@ class FragmentHome : Fragment(), AppCoordinator {
         println("INSIDE HOME")
     }
 
+    override fun generate_click_home_upper_bar_buttons(button_name: String) {
+        println("WHATEVER " + button_name)
+        upperBar.generate_click(button_name)
+    }
 
     fun set_fragment_visibility() {
         fragment_layout_home_modules?.visibility = if (fragmentStateHome.visibility_home_modules) View.VISIBLE else View.GONE

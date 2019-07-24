@@ -1,6 +1,6 @@
 package solutions.pundir.godslayer.Home.Fragments
 
-interface HomeCoordinator {
+interface HomeMainContainerCoordinator {
     fun update_modules()
     fun update_languages(mid : Long)
     fun update_platforms(mid : Long, parent_id : Long)

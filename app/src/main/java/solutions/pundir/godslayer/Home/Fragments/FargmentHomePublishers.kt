@@ -15,13 +15,13 @@ import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
 class FargmentHomePublishers : Fragment() {
-    internal lateinit var callback : HomeCoordinator
+    internal lateinit var callback : HomeMainContainerCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
     internal var items = mutableListOf<Triple<Long, Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterPublishers
 
-    fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
         this.dbHandler = dbHandler
         this.appStateHome = appStateHome

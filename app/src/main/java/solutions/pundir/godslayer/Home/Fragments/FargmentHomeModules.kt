@@ -15,13 +15,13 @@ import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
 class FargmentHomeModules : Fragment() {
-    internal lateinit var callback : HomeCoordinator
+    internal lateinit var callback : HomeMainContainerCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
     internal var items = mutableListOf<Pair<Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterModules
 
-    fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
         this.dbHandler = dbHandler
         this.appStateHome = appStateHome
@@ -39,6 +39,10 @@ class FargmentHomeModules : Fragment() {
         recycler_view_home_modules.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterModules(context, items, appStateHome, this)
         recycler_view_home_modules.adapter = adapter
+        update_recycler_view()
+    }
+
+    fun update_recycler_view() {
         doAsync {
             items.clear()
             val cursor = dbHandler.getModules()
