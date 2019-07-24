@@ -15,7 +15,7 @@ class RecycleViewAdapterLanguages internal constructor(context: Context?, val it
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_home, parent, false)
-        return HomeItemViewHolder(itemView).listen { pos, _ ->
+        return HomeItemViewHolder(itemView).listen<HomeItemViewHolder> { pos, _ ->
             val item = items.get(pos)
             appStateHome.set_language_id(item.first, item.second)
         }
@@ -35,13 +35,8 @@ class RecycleViewAdapterLanguages internal constructor(context: Context?, val it
         println(items[position])
     }
 
-    inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+    inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
         val recyclerViewHomeItem: TextView = v.findViewById(R.id.recycler_view_home_item)
-        override fun onClick(v: View?) {
-            Log.d("RecyclerView", "CLICK!")
-            println("click clikclk lkmalksmc lksdal kvmal dsnv")
-
-        }
     }
 
 }

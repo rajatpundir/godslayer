@@ -11,7 +11,9 @@ import java.io.File
 
 internal class DatabaseContext(base: Context) : ContextWrapper(base) {
     override fun getDatabasePath(name: String): File {
-        return File("/data/user/0/solutions.pundir.godslayer/cache/0.db")
+        println(name)
+        println("##################################################################################################")
+        return File("/data/user/0/solutions.pundir.godslayer/cache/" + name)
     }
     override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory, errorHandler: DatabaseErrorHandler?): SQLiteDatabase {
         return openOrCreateDatabase(name, mode, factory)

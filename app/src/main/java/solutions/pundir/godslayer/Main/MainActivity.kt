@@ -2,6 +2,7 @@ package solutions.pundir.godslayer.Main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,19 +18,17 @@ import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
-// TODO
-// Display content inside app by reading sqlite db.
 val fragmentStateApp = StateFragmentsApp()
 
 class MainActivity : AppCompatActivity(), AppCoordinator {
-    val dbHandler = GodslayerDBOpenHelper(this, null)
+    lateinit var dbHandler : GodslayerDBOpenHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        moveDatabaseFromAssetsToCache()
+        dbHandler = GodslayerDBOpenHelper(this@MainActivity, null, "0.db")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup_bottom_bar_buttons()
-        moveDatabaseFromAssetsToCache()
-
     }
 
     override fun onAttachFragment(fragment: Fragment?) {
@@ -54,6 +53,7 @@ class MainActivity : AppCompatActivity(), AppCoordinator {
                 }
             }
         }
+        println("PASS")
     }
 
     fun set_fragment_visibility() {

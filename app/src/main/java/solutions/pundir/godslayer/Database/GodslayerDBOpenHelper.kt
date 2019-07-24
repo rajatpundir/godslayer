@@ -5,10 +5,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) : SQLiteOpenHelper(
+class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFactory?, filename : String) : SQLiteOpenHelper(
     DatabaseContext(
         context
-    ), "godslayer.db", factory, 1) {
+    ), filename, factory, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE IF NOT EXISTS MODULES(ID INTEGER PRIMARY KEY, NAME TEXT UNIQUE NOT NULL);")

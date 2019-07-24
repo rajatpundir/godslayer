@@ -35,11 +35,8 @@ class RecycleViewAdapterPlaylists internal constructor(context: Context?, val it
         println(items[position])
     }
 
-    inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+    inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
         val recyclerViewHomeItem: TextView = v.findViewById(R.id.recycler_view_home_item)
-        override fun onClick(v: View?) {
-            Log.d("RecyclerView", "CLICK!")
-        }
     }
 
 }
