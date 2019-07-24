@@ -5,7 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_home_modules.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
+import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterModules
 import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
@@ -25,5 +30,30 @@ class FargmentHomeModules : Fragment() {
         val v = inflater.inflate(R.layout.fragment_home_modules, container, false)
         return v
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        doAsync {
+            val cursor = dbHandler.getModules()
+            var items = mutableListOf<Pair<Long, String>>()
+            cursor!!.moveToFirst()
+            var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
+            var name = cursor.getString(cursor.getColumnIndex("NAME"))
+            items.add(Pair(rid, name))
+            while (cursor.moveToNext()) {
+                rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
+                name = cursor.getString(cursor.getColumnIndex("NAME"))
+                items.add(Pair(rid, name))
+            }
+            cursor.close()
+            uiThread {
+                var linearLayoutManager = LinearLayoutManager(context)
+                recycler_view_home_modules.layoutManager = linearLayoutManager
+                val adapter = RecycleViewAdapterModules(context, items, appStateHome)
+                recycler_view_home_modules.adapter = adapter
+            }
+        }
+    }
+
 
 }
