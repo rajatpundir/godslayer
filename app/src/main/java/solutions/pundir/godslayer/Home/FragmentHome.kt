@@ -14,15 +14,18 @@ import kotlinx.android.synthetic.main.fragment_home_upper_bar.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
+import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer
+import solutions.pundir.godslayer.Home.Fragments.HomeCoordinator
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterModules
+import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
 val fragmentStateHome = StateFragmentsHome()
+var appStateHome = StateAppHome()
 
-class FragmentHome : Fragment() {
-    companion object {
-
-    }
+class FragmentHome : Fragment(), HomeCoordinator {
+    internal lateinit var callback : AppCoordinator
+    internal lateinit var dbHandler: GodslayerDBOpenHelper
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
@@ -33,6 +36,24 @@ class FragmentHome : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setup__home_upper_bar_buttons()
     }
+
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentHomeMainContainer) {
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+        }
+    }
+
+    override fun callback_from_child_fragment() {
+        println("Callback from child fragment to Fragment Home")
+    }
+
+    fun callback_from_parent(callback : AppCoordinator, dbHandler: GodslayerDBOpenHelper) {
+        this.callback = callback
+        this.dbHandler = dbHandler
+        println("INSIDE HOME")
+    }
+
 
     fun set_fragment_visibility() {
         fragment_layout_home_modules?.visibility = if (fragmentStateHome.visibility_home_modules) View.VISIBLE else View.GONE

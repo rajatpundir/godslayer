@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
+import solutions.pundir.godslayer.Home.FragmentHome
 import solutions.pundir.godslayer.R
 
 class FragmentMainContainer : Fragment(), AppCoordinator {
@@ -17,17 +18,17 @@ class FragmentMainContainer : Fragment(), AppCoordinator {
         return v
     }
 
-//    override fun onAttachFragment(childFragment: Fragment?) {
-//        super.onAttachFragment(childFragment)
-//        if (childFragment is FragmentHome) {
-//            childFragment.callback_from_parent(callback, dbHandler)
-//        }
-//    }
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentHome) {
+            childFragment.callback_from_parent(callback, dbHandler)
+        }
+    }
 
     fun callback_from_parent(callback : AppCoordinator, dbHandler: GodslayerDBOpenHelper) {
         this.callback = callback
         this.dbHandler = dbHandler
-        println("YYYYYYYYYYYYYYYYEEEEEEEEEEEEESSSSSSSSSss")
+        println("INSIDE MAIN CONTAINER")
     }
 
     override fun callback_from_child_fragment() {
