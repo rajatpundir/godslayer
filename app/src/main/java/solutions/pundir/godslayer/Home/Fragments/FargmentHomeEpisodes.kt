@@ -56,6 +56,7 @@ class FargmentHomeEpisodes : Fragment() {
                 recycler_view_home_episodes.adapter = adapter
             }
         }
+        callback.callback_from_child_fragment()
     }
 
 }

@@ -1,29 +1,22 @@
 package solutions.pundir.godslayer.Home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_home_episodes.*
 import kotlinx.android.synthetic.main.fragment_home_main_container.*
-import kotlinx.android.synthetic.main.fragment_home_playlists.*
 import kotlinx.android.synthetic.main.fragment_home_upper_bar.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer
 import solutions.pundir.godslayer.Home.Fragments.HomeCoordinator
-import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterModules
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
 val fragmentStateHome = StateFragmentsHome()
 var appStateHome = StateAppHome()
 
-class FragmentHome : Fragment(), HomeCoordinator {
+class FragmentHome : Fragment(), AppCoordinator {
     internal lateinit var callback : AppCoordinator
     internal lateinit var dbHandler: GodslayerDBOpenHelper
 

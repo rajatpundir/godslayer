@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.StateAppHome
+import solutions.pundir.godslayer.Home.StateHomeMainContainer
+import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
 class FragmentHomeMainContainer : Fragment(), HomeCoordinator {
-    internal lateinit var callback : HomeCoordinator
+    internal lateinit var callback : AppCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
+    internal val stateHomeMainContainer = StateHomeMainContainer()
 
-    fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : AppCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
         this.dbHandler = dbHandler
         this.appStateHome = appStateHome
@@ -33,25 +36,32 @@ class FragmentHomeMainContainer : Fragment(), HomeCoordinator {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
         if (childFragment is FargmentHomeModules) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.modules_fragment = childFragment
         }
         if (childFragment is FargmentHomeLanguages) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.languages_fragment = childFragment
         }
         if (childFragment is FargmentHomePlatforms) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.platforms_fragment = childFragment
         }
         if (childFragment is FargmentHomePublishers) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.publishers_fragment = childFragment
         }
         if (childFragment is FargmentHomePlaylists) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.playlists_fragment = childFragment
         }
         if (childFragment is FargmentHomeEpisodes) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.episodes_fragment = childFragment
         }
         if (childFragment is FargmentHomeSources) {
-            childFragment.callback_from_parent(callback, dbHandler, appStateHome)
+            childFragment.callback_from_parent(this, dbHandler, appStateHome)
+            stateHomeMainContainer.sources_fragment = childFragment
         }
     }
 
