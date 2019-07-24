@@ -3,6 +3,7 @@ package solutions.pundir.godslayer.Main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_bottom_bar.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -12,41 +13,34 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterModules
+import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
+import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
 // TODO
 // Display content inside app by reading sqlite db.
 val fragmentStateApp = StateFragmentsApp()
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppCoordinator {
+    val dbHandler = GodslayerDBOpenHelper(this, null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup_bottom_bar_buttons()
         moveDatabaseFromAssetsToCache()
-        val dbHandler = GodslayerDBOpenHelper(this, null)
-        // Pass dbHandler to fragments and let Home populate its recycler view using it.
-        doAsync {
-            var items = mutableListOf<String>()
-            val cursor = dbHandler.getPlaylists()
-            cursor!!.moveToFirst()
-            items.add(cursor.getString(cursor.getColumnIndex("NAME")))
-            while (cursor.moveToNext()) {
-                items.add(cursor.getString(cursor.getColumnIndex("NAME")))
-            }
-            print(items.take(10))
-            cursor.close()
-            uiThread {
-                var linearLayoutManager = LinearLayoutManager(this@MainActivity)
-                recycler_view_home_playlists.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterModules(
-                    this@MainActivity,
-                    items
-                )
-                recycler_view_home_playlists.adapter = adapter
-            }
+
+    }
+
+    override fun onAttachFragment(fragment: Fragment?) {
+        super.onAttachFragment(fragment)
+        if (fragment is FragmentMainContainer) {
+            fragment.callback_from_parent(this, dbHandler)
         }
+    }
+
+    override fun callback_from_child_fragment() {
+        println("Callback from child fragment to Main Activity.")
     }
 
     fun moveDatabaseFromAssetsToCache() {
