@@ -18,6 +18,8 @@ class FargmentHomePlatforms : Fragment() {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
+    internal var items = mutableListOf<Triple<Long, Long, String>>()
+    internal lateinit var adapter : RecycleViewAdapterPlatforms
 
     fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
@@ -33,9 +35,16 @@ class FargmentHomePlatforms : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var linearLayoutManager = LinearLayoutManager(context)
+        recycler_view_home_platforms.layoutManager = linearLayoutManager
+        adapter = RecycleViewAdapterPlatforms(context, items, appStateHome, this)
+        recycler_view_home_platforms.adapter = adapter
+    }
+
+    fun update_recycler_view(mid : Long, parent_id: Long) {
         doAsync {
-            val cursor = dbHandler.getPlatforms()
-            var items = mutableListOf<Triple<Long, Long, String>>()
+            items.clear()
+            val cursor = dbHandler.getPlatformsByParent(mid, parent_id)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
@@ -49,12 +58,13 @@ class FargmentHomePlatforms : Fragment() {
             }
             cursor.close()
             uiThread {
-                var linearLayoutManager = LinearLayoutManager(context)
-                recycler_view_home_platforms.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterPlatforms(context, items, appStateHome)
-                recycler_view_home_platforms.adapter = adapter
+                adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    fun update_publishers_via_parent(mid : Long, parent_id : Long) {
+        callback.update_publishers(mid, parent_id)
     }
 
 }

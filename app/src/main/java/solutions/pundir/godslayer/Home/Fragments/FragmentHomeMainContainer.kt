@@ -72,18 +72,22 @@ class FragmentHomeMainContainer : Fragment(), HomeCoordinator {
 
     override fun update_platforms(mid: Long, parent_id: Long) {
         println("UPDATE PLATFORMS")
+        stateHomeMainContainer.platforms_fragment.update_recycler_view(mid, parent_id)
     }
 
     override fun update_publishers(mid: Long, parent_id: Long) {
         println("UPDATE PUBLISHERS")
+        stateHomeMainContainer.publishers_fragment.update_recycler_view(mid, parent_id)
     }
 
     override fun update_playlists(mid: Long, parent_id: Long) {
         println("UPDATE PLAYLISTS")
+        stateHomeMainContainer.playlists_fragment.update_recycler_view(mid, parent_id)
     }
 
     override fun update_episodes(mid: Long, parent_id: Long) {
         println("UPDATE EPISODES")
+        stateHomeMainContainer.episodes_fragment.update_recycler_view(mid, parent_id)
     }
 
     override fun update_sources(mid: Long, parent_id: Long) {

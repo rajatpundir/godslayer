@@ -18,6 +18,8 @@ class FargmentHomeModules : Fragment() {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
+    internal var items = mutableListOf<Pair<Long, String>>()
+    internal lateinit var adapter : RecycleViewAdapterModules
 
     fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
         this.callback = callback
@@ -33,9 +35,13 @@ class FargmentHomeModules : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var linearLayoutManager = LinearLayoutManager(context)
+        recycler_view_home_modules.layoutManager = linearLayoutManager
+        adapter = RecycleViewAdapterModules(context, items, appStateHome, this)
+        recycler_view_home_modules.adapter = adapter
         doAsync {
+            items.clear()
             val cursor = dbHandler.getModules()
-            var items = mutableListOf<Pair<Long, String>>()
             cursor!!.moveToFirst()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
             var name = cursor.getString(cursor.getColumnIndex("NAME"))
@@ -47,10 +53,7 @@ class FargmentHomeModules : Fragment() {
             }
             cursor.close()
             uiThread {
-                var linearLayoutManager = LinearLayoutManager(context)
-                recycler_view_home_modules.layoutManager = linearLayoutManager
-                val adapter = RecycleViewAdapterModules(context, items, appStateHome, this@FargmentHomeModules)
-                recycler_view_home_modules.adapter = adapter
+                adapter.notifyDataSetChanged()
             }
         }
     }

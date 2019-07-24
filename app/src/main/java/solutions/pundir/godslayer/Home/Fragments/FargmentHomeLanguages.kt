@@ -37,7 +37,7 @@ class FargmentHomeLanguages : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_languages.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterLanguages(context, items, appStateHome)
+        adapter = RecycleViewAdapterLanguages(context, items, appStateHome, this)
         recycler_view_home_languages.adapter = adapter
     }
 
@@ -61,6 +61,10 @@ class FargmentHomeLanguages : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    fun update_platforms_via_parent(mid : Long, parent_id : Long) {
+        callback.update_platforms(mid, parent_id)
     }
 
 }
