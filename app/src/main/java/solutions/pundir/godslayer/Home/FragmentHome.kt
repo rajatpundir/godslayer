@@ -48,7 +48,6 @@ class FragmentHome : Fragment(), HomeCoordinator {
     }
 
     override fun generate_click_home_upper_bar_buttons(button_name: String) {
-        println("WHATEVER " + button_name)
         upperBar.generate_click(button_name)
     }
 

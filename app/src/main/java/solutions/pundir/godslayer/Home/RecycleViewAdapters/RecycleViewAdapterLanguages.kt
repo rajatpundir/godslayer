@@ -34,7 +34,6 @@ class RecycleViewAdapterLanguages internal constructor(context: Context?, val it
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
         holder.recyclerViewHomeItem.text = items[position].third
-        println(items[position])
     }
 
     inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {

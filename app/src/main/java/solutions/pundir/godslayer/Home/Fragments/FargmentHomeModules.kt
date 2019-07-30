@@ -45,6 +45,9 @@ class FargmentHomeModules : Fragment() {
     fun update_recycler_view() {
         doAsync {
             items.clear()
+            uiThread {
+                adapter.notifyDataSetChanged()
+            }
             val cursor = dbHandler.getModules()
             cursor!!.moveToFirst()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()

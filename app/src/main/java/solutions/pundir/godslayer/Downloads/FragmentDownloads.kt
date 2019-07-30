@@ -14,4 +14,8 @@ class FragmentDownloads : Fragment() {
         return v
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
 }

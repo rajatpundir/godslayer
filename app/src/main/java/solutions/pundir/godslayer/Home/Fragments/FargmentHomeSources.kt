@@ -44,6 +44,9 @@ class FargmentHomeSources : Fragment() {
     fun update_recycler_view(mid : Long, parent_id : Long) {
         doAsync {
             items.clear()
+            uiThread {
+                adapter.notifyDataSetChanged()
+            }
             val cursor = dbHandler.getSourcesByParent(mid, parent_id)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
