@@ -12,7 +12,7 @@ import solutions.pundir.godslayer.Home.StateHomeMainContainer
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
-class FragmentHomeMainContainerMainContainer : Fragment(), HomeMainContainerCoordinator {
+class FragmentHomeMainContainer : Fragment(), HomeMainContainerCoordinator {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
@@ -102,6 +102,11 @@ class FragmentHomeMainContainerMainContainer : Fragment(), HomeMainContainerCoor
         println("UPDATE SOURCES")
         stateHomeMainContainer.sources_fragment.update_recycler_view(mid, parent_id)
         callback.generate_click_home_upper_bar_buttons("SOURCES")
+    }
+
+    override fun download_source(mid: Long, rid: Long) {
+        println("DOWNLOAD SOURCE")
+        callback.download_source(mid, rid)
     }
 
 }

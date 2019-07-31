@@ -90,9 +90,14 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM SOURCES WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
-    fun getMagnetLinks() : Cursor? {
+    fun getMagnetLinkIdFromSourceId(mid : Long, rid : Long) : Cursor? {
         val db = this.readableDatabase
-        return db.rawQuery("SELECT * FROM MAGNET_LINKS ORDER BY ID DESC", null)
+        return db.rawQuery("SELECT * FROM SOURCES WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC", null)
+    }
+
+    fun getMagnetLink(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM MAGNET_LINKS WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC LIMIT 1", null)
     }
 
 }

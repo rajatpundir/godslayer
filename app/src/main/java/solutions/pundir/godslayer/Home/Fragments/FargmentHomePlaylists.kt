@@ -60,8 +60,12 @@ class FargmentHomePlaylists : Fragment() {
                 items.add(Triple(module_id, rid, name))
             }
             cursor.close()
+            println(items.size)
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size == 1) {
+                    callback.update_episodes(module_id, rid)
+                }
             }
         }
     }

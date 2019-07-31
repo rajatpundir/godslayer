@@ -61,6 +61,9 @@ class FargmentHomeModules : Fragment() {
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size == 1) {
+                    callback.update_languages(rid)
+                }
             }
         }
     }

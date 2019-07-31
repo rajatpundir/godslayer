@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_home_main_container.*
 import kotlinx.android.synthetic.main.fragment_home_upper_bar.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainerMainContainer
+import solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer
 import solutions.pundir.godslayer.Home.Fragments.FragmentHomeUpperBar
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
@@ -33,7 +33,7 @@ class FragmentHome : Fragment(), HomeCoordinator {
 
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
-        if (childFragment is FragmentHomeMainContainerMainContainer) {
+        if (childFragment is FragmentHomeMainContainer) {
             childFragment.callback_from_parent(this, dbHandler, appStateHome)
         }
         if (childFragment is FragmentHomeUpperBar) {
@@ -49,6 +49,10 @@ class FragmentHome : Fragment(), HomeCoordinator {
 
     override fun generate_click_home_upper_bar_buttons(button_name: String) {
         upperBar.generate_click(button_name)
+    }
+
+    override fun download_source(mid: Long, rid: Long) {
+        callback.download_source(mid, rid)
     }
 
     fun set_fragment_visibility() {

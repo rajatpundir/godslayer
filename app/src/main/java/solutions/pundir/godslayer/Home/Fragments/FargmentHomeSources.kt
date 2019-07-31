@@ -37,7 +37,7 @@ class FargmentHomeSources : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_sources.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterSources(context, items, appStateHome)
+        adapter = RecycleViewAdapterSources(context, items, appStateHome, this)
         recycler_view_home_sources.adapter = adapter
     }
 
@@ -64,6 +64,10 @@ class FargmentHomeSources : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    fun download_source_via_parent(mid : Long, rid : Long) {
+        callback.download_source(mid, rid)
     }
 
 }

@@ -62,6 +62,9 @@ class FargmentHomeLanguages : Fragment() {
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size == 1) {
+                    callback.update_platforms(module_id, rid)
+                }
             }
         }
     }

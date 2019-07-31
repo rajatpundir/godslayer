@@ -12,6 +12,6 @@
             android:layout_weight="30"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainerMainContainer"
+            android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer"
             android:id="@+id/fragment_home_main_container"/>
 </LinearLayout>

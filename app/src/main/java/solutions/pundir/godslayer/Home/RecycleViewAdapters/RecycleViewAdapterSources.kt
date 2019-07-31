@@ -4,16 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import solutions.pundir.godslayer.Home.Fragments.FargmentHomeSources
 import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class RecycleViewAdapterSources internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome) : RecyclerView.Adapter<RecycleViewAdapterSources.HomeItemViewHolder>() {
+class RecycleViewAdapterSources internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome, parent_fragment : FargmentHomeSources) : RecyclerView.Adapter<RecycleViewAdapterSources.HomeItemViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private val parent_fragment = parent_fragment
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
-        val itemView = inflater.inflate(R.layout.recycler_view_item_home, parent, false)
+        val itemView = inflater.inflate(R.layout.recycler_view_item_home_source, parent, false)
         return HomeItemViewHolder(itemView).listen { pos, _ ->
             val item = items.get(pos)
             appStateHome.set_source_id(item.first, item.second)
@@ -30,11 +33,13 @@ class RecycleViewAdapterSources internal constructor(context: Context?, val item
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
-        holder.recyclerViewHomeItem.text = items[position].third
+        holder.recyclerViewHomeSourceItem.text = items[position].third
+        holder.downloadButton.setOnClickListener { parent_fragment.download_source_via_parent(items[position].first, items[position].second) }
     }
 
     inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
-        val recyclerViewHomeItem: TextView = v.findViewById(R.id.recycler_view_home_item)
+        val recyclerViewHomeSourceItem: TextView = v.findViewById(R.id.recycler_view_home_source_item)
+        val downloadButton : Button = v.findViewById(R.id.button_home_source_download)
     }
 
 }

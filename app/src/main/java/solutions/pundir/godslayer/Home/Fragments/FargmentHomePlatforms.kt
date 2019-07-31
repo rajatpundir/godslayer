@@ -62,6 +62,9 @@ class FargmentHomePlatforms : Fragment() {
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size == 1) {
+                    callback.update_publishers(module_id, rid)
+                }
             }
         }
     }

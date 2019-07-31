@@ -62,6 +62,9 @@ class FargmentHomeEpisodes : Fragment() {
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size == 1) {
+                    callback.update_sources(module_id, rid)
+                }
             }
         }
     }

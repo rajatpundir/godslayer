@@ -2,49 +2,29 @@ package solutions.pundir.godslayer.Main
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.masterwok.simpletorrentandroid.TorrentSession
-import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import kotlinx.android.synthetic.main.fragment_bottom_bar.*
 import kotlinx.android.synthetic.main.fragment_main_container.*
-import org.jetbrains.anko.doAsync
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
 val fragmentStateApp = StateFragmentsApp()
 
-class MainActivity : AppCompatActivity(), AppCoordinator {
+class Master : AppCompatActivity(), MasterCoordinator {
 
     lateinit var dbHandler : GodslayerDBOpenHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         moveDatabaseFromAssetsToCache()
-        dbHandler = GodslayerDBOpenHelper(this@MainActivity, null, "0.db")
+        dbHandler = GodslayerDBOpenHelper(this@Master, null, "0.db")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup_bottom_bar_buttons()
-        // http, https, magnet, file, and content Uri types are all supported.
-        val torrentUri = Uri.parse("magnet:?xt=urn:btih:JBJTRD53AZ4U4MXGXCI4IEB5LXHZDT7W&tr=http://nyaa.tracker.wf:7777/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.internetwarriors.net:1337/announce&tr=udp://tracker.leechersparadise.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://mgtracker.org:6969/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://peerfect.org:6969/announce&tr=http://share.camoe.cn:8080/announce&tr=http://t.nyaatracker.com:80/announce&tr=https://open.kickasstracker.com:443/announce")
-        val torrentSessionOptions = TorrentSessionOptions(
-            downloadLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            , onlyDownloadLargestFile = true
-            , enableLogging = false
-            , shouldStream = true
-        )
-        val torrentSession = TorrentSession(torrentSessionOptions)
-        println("XXXXX")
-        doAsync {
-            torrentSession.start(this@MainActivity, torrentUri)
-        }
-        println("XXXXX")
     }
 
     override fun onResume() {
