@@ -13,10 +13,9 @@ import solutions.pundir.godslayer.Home.Fragments.FragmentHomeUpperBar
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
 
-val fragmentStateHome = StateFragmentsHome()
-var appStateHome = StateAppHome()
-
 class FragmentHome : Fragment(), HomeCoordinator {
+    private val fragmentStateHome = StateFragmentsHome()
+    private var appStateHome = StateAppHome() // useless
     internal lateinit var callback : AppCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var upperBar: FragmentHomeUpperBar

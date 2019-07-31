@@ -13,10 +13,8 @@ import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
-val fragmentStateApp = StateFragmentsApp()
-
 class Master : AppCompatActivity(), MasterCoordinator {
-
+    private val fragmentStateApp = StateFragmentsApp()
     lateinit var dbHandler : GodslayerDBOpenHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {

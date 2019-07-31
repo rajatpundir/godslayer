@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_downloads_torrents"
+            android:visibility="visible">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents"
+                android:id="@+id/fragment_downloads_torrents"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_layout_downloads_torrent_stats"
+            android:visibility="gone">
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrentStats"
+                android:id="@+id/fragment_downloads_torrent_stats"/>
+    </LinearLayout>
+</LinearLayout>
