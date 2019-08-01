@@ -10,9 +10,8 @@ import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 import solutions.pundir.godslayer.Home.Fragments.FargmentHomePlatforms
 
-class RecycleViewAdapterPlatforms internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome, parent_fragment : FargmentHomePlatforms) : RecyclerView.Adapter<RecycleViewAdapterPlatforms.HomeItemViewHolder>() {
+class RecycleViewAdapterPlatforms internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome, val parent_fragment : FargmentHomePlatforms) : RecyclerView.Adapter<RecycleViewAdapterPlatforms.HomeItemViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private val parent_fragment = parent_fragment
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_home, parent, false)

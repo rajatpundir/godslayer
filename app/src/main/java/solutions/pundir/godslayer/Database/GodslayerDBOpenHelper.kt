@@ -80,6 +80,11 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM EPISODES WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
+    fun getEpisode(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM EPISODES WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC LIMIT 1", null)
+    }
+
     fun getSources() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM SOURCES ORDER BY ID DESC", null)

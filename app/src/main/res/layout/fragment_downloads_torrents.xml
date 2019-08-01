@@ -4,8 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button
-            android:text="TORRENTS"
+    <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button"/>
+            android:layout_height="match_parent" android:id="@+id/recycler_view_downloads_torrents"/>
+
 </LinearLayout>
