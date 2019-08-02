@@ -47,13 +47,25 @@ class FragmentDownloadsTorrents : Fragment() {
             }
         }
         if (check) {
-            items.add(GodslayerTorrent(context, dbHandler, mid, rid))
+            context?.let { GodslayerTorrent(it, dbHandler, mid, rid) }?.let { items.add(it) }
             adapter.notifyDataSetChanged()
-            println(items.size)
         } else {
             context?.toast("Already present in the Downloads Queue.")
         }
+    }
 
+    fun remove_torrent_and_update_adapter(mid : Long, rid : Long) {
+        var new_items = items.toMutableList()
+        items.clear()
+        for (item in new_items.listIterator()) {
+            if (item.source_id == rid && item.module_id == mid) {
+                continue
+            } else {
+                items.add(item)
+            }
+        }
+        adapter.notifyDataSetChanged()
+        context?.toast("Removed")
     }
 
 }

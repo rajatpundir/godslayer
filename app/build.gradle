@@ -6,10 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
     defaultConfig {
         applicationId "solutions.pundir.godslayer"
-        minSdkVersion 19
+        minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

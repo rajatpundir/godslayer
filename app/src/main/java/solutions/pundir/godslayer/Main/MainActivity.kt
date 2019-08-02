@@ -2,24 +2,32 @@ package solutions.pundir.godslayer.Main
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.masterwok.simpletorrentandroid.TorrentSession
+import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import kotlinx.android.synthetic.main.fragment_bottom_bar.*
 import kotlinx.android.synthetic.main.fragment_main_container.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
+import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
-class Master : AppCompatActivity(), MasterCoordinator {
+class MainActivity : AppCompatActivity(), MasterCoordinator {
     private val fragmentStateApp = StateFragmentsApp()
     lateinit var dbHandler : GodslayerDBOpenHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         moveDatabaseFromAssetsToCache()
-        dbHandler = GodslayerDBOpenHelper(this@Master, null, "0.db")
+        dbHandler = GodslayerDBOpenHelper(this@MainActivity, null, "0.db")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setup_bottom_bar_buttons()
@@ -30,6 +38,9 @@ class Master : AppCompatActivity(), MasterCoordinator {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
         }
+        //var t = GodslayerTorrent(this, dbHandler, 4962685108190249448, 62321)
+
+
     }
 
     override fun onAttachFragment(fragment: Fragment?) {
