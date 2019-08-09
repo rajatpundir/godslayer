@@ -12,6 +12,7 @@ import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.Downloads.RecycleViewAdapters.RecycleViewAdapterTorrents
 import solutions.pundir.godslayer.R
+import solutions.pundir.godslayer.Downloads.RecycleViewAdapters.RecycleViewAdapterTorrents.DownloadsItemViewHolder
 
 class FragmentDownloadsTorrents : Fragment() {
     internal lateinit var callback : FragmentDownloadsMainContainerCoordinator
@@ -47,11 +48,17 @@ class FragmentDownloadsTorrents : Fragment() {
             }
         }
         if (check) {
-            context?.let { GodslayerTorrent(it, dbHandler, mid, rid) }?.let { items.add(it) }
+            context?.let { GodslayerTorrent(it, dbHandler, mid, rid, this@FragmentDownloadsTorrents) }?.let { items.add(it) }
+            items.last().callback_from_parent_fragment(items.size - 1)
             adapter.notifyDataSetChanged()
         } else {
             context?.toast("Already present in the Downloads Queue.")
         }
+    }
+
+    fun refresh_torrent_in_adapter(position : Int) {
+        val x = (recycler_view_downloads_torrents.findViewHolderForLayoutPosition(position)) as DownloadsItemViewHolder?
+        x?.update_view_holder()
     }
 
     fun remove_torrent_and_update_adapter(mid : Long, rid : Long) {
@@ -62,6 +69,7 @@ class FragmentDownloadsTorrents : Fragment() {
                 continue
             } else {
                 items.add(item)
+                item.callback_from_parent_fragment(items.size - 1)
             }
         }
         adapter.notifyDataSetChanged()

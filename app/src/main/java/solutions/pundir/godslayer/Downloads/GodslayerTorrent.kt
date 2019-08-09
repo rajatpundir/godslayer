@@ -12,9 +12,10 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Downloads.RecycleViewAdapters.RecycleViewAdapterTorrents
+import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
+import java.text.FieldPosition
 
-class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long) : TorrentSessionListener{
+class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrents) : TorrentSessionListener{
     internal var module_id = mid
     internal var source_id = rid
     internal var parent_id : Long = -1
@@ -23,17 +24,19 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     internal var magnet_link_id : Long = -1
     internal var magnet_url = ""
     internal var torrent_state = "Downloading metadata..."
+    internal var torrent_progress = 0
+    internal var isPaused = false
     lateinit var torrentUri : Uri
     lateinit var torrentSessionOptions : TorrentSessionOptions
     lateinit var torrentSession: TorrentSession
-    lateinit var recycler_view_callback : RecycleViewAdapterTorrents
+    var position  = 0
 
     init {
         get_magnet_link()
     }
 
-    fun callback_from_recycler_view(callback : RecycleViewAdapterTorrents) {
-        this.recycler_view_callback = callback
+    fun callback_from_parent_fragment(position : Int) {
+        this.position = position
     }
 
     fun get_magnet_link() {
@@ -74,10 +77,6 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
                 context?.toast("Starting")
             }
             context.let { torrentSession.start(it, torrentUri) }
-            torrent_state = "Downloading..."
-            if (::recycler_view_callback.isInitialized) {
-                recycler_view_callback.update_torrent_state(torrent_state)
-            }
             uiThread {
                 context?.toast("Downloading")
             }
@@ -86,40 +85,36 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
 
 
     fun pause_or_resume_session() {
-        doAsync {
-            if (torrent_state != "Paused") {
-                torrentSession.pause()
-                torrent_state = "Paused"
-                if (::recycler_view_callback.isInitialized) {
-                    recycler_view_callback.update_torrent_state(torrent_state)
-                    recycler_view_callback.holder.pauseOrResumeButton.text = "RESUME"
+        if (torrent_state != "Downloading metadata...") {
+            doAsync {
+                if (isPaused == false) {
+                    isPaused = true
+                    torrentSession.pause()
+                    torrent_state = "Paused"
+                    parent_fragment.refresh_torrent_in_adapter(position)
+                    uiThread {
+                        context?.toast("Paused")
+                    }
                 }
-                uiThread {
-                    context?.toast("Paused")
-                }
-            }
-            else if (torrent_state != "Downloading...") {
-                torrentSession.resume()
-                torrent_state = "Downloading..."
-                if (::recycler_view_callback.isInitialized) {
-                    recycler_view_callback.update_torrent_state(torrent_state)
-                    recycler_view_callback.holder.pauseOrResumeButton.text = "PAUSE"
-                }
-                uiThread {
-                    context?.toast("Resumed")
+                else if (isPaused == true) {
+                    isPaused = false
+                    torrentSession.resume()
+                    torrent_state = "Downloading..."
+                    parent_fragment.refresh_torrent_in_adapter(position)
+                    uiThread {
+                        context?.toast("Resumed")
+                    }
                 }
             }
         }
     }
 
     fun stop_session() {
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.call_parent_to_remove_item(module_id, source_id)
-            doAsync {
-                torrentSession.stop()
-                uiThread {
-                    context?.toast("Stopped")
-                }
+        parent_fragment.remove_torrent_and_update_adapter(module_id, source_id)
+        doAsync {
+            torrentSession.stop()
+            uiThread {
+                context?.toast("Stopped")
             }
         }
     }
@@ -128,64 +123,57 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onAddTorrent")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Addded torrent.")
-        }
+        torrent_state = "Downloading..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onBlockUploaded(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onBlockUploaded")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Block Uploaded.")
-        }
+        torrent_state = "Block Uploaded..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onMetadataFailed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onMetadataFailed")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Failed to get metadata.")
-        }
+        torrent_state = "Failed to get metadata..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Metadata received.")
-        }
+        torrent_state = "Metadata received..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Downloading...")
-            recycler_view_callback.update_torrent_progress(torrentSessionStatus.progress)
-        }
+        torrent_state = "Downloading..."
+        torrent_progress = (torrentSessionStatus.progress * 100).toInt()
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onTorrentDeleteFailed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentDeleteFailed")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Torrent Delete Failed.")
-        }
+        torrent_state = "Torrent Delete Failed..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onTorrentDeleted(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentDeleted")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Torrent Deleted.")
-        }
+        torrent_state = "Torrent Deleted..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onTorrentError(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
@@ -198,30 +186,30 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onTorrentFinished")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Torrent Finished.")
-        }
     }
 
     override fun onTorrentPaused(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentPaused")
         println("---------------------------------------------------------------------------------------")
+        torrent_state = "Paused"
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onTorrentRemoved(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentRemoved")
         println("---------------------------------------------------------------------------------------")
-        if (::recycler_view_callback.isInitialized) {
-            recycler_view_callback.update_torrent_state("Torrent Removed.")
-        }
+        torrent_state = "Torrent Removed..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
     override fun onTorrentResumed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentResumed")
         println("---------------------------------------------------------------------------------------")
+        torrent_state = "Downloading..."
+        parent_fragment.refresh_torrent_in_adapter(position)
     }
 
 }

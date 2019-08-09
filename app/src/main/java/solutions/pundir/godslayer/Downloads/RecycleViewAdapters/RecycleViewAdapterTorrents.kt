@@ -16,7 +16,6 @@ import solutions.pundir.godslayer.R
 
 class RecycleViewAdapterTorrents internal constructor(context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrents) : RecyclerView.Adapter<RecycleViewAdapterTorrents.DownloadsItemViewHolder>() {
     private val inflater : LayoutInflater = LayoutInflater.from(context)
-    lateinit var holder : DownloadsItemViewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_downloads_torrent, parent, false)
@@ -38,37 +37,10 @@ class RecycleViewAdapterTorrents internal constructor(context: Context?, val ite
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: DownloadsItemViewHolder, position: Int) {
-        this.holder = holder
-        items[position].callback_from_recycler_view(this@RecycleViewAdapterTorrents)
-        holder.recyclerViewDownloadsTorrentEpisodeItem.text = items[position].episode_name
-        holder.recyclerViewDownloadsTorrentSourceItem.text = items[position].source_name
-        holder.recyclerViewDownloadsTorrentStateItem.text = items[position].torrent_state
-        println("_@__@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2")
-        println(position)
-        holder.pauseOrResumeButton.setOnClickListener { items[position].pause_or_resume_session() }
-        holder.removeButton.setOnClickListener { items[position].stop_session() }
-        holder.downlaodProgressBar.max = 100
-        holder.downlaodProgressBar.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN);
+        holder.initialize_view_holder(items, position)
     }
 
-    fun update_torrent_state(torrent_state : String) {
-        holder.recyclerViewDownloadsTorrentStateItem.text = torrent_state
-    }
-
-    fun update_torrent_progress(progress : Float) {
-        holder.downlaodProgressBar.progress = (progress * 100).toInt()
-        holder.recyclerViewDownloadsTorrentProgressPercentageItem.text = (progress * 100).toInt().toString() + "%"
-        if ((progress * 100).toInt() == 100) {
-            holder.recyclerViewDownloadsTorrentStateItem.text = "Finished"
-            holder.pauseOrResumeButton.visibility = View.GONE
-        }
-    }
-
-    fun call_parent_to_remove_item(module_id : Long, source_id : Long) {
-        parent_fragment.remove_torrent_and_update_adapter(module_id, source_id)
-    }
-
-    inner class DownloadsItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
+    class DownloadsItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
         val recyclerViewDownloadsTorrentEpisodeItem: TextView = v.findViewById(R.id.recycler_view_downloads_torrent_episode_item)
         val recyclerViewDownloadsTorrentSourceItem: TextView = v.findViewById(R.id.recycler_view_downloads_torrent_source_item)
         val recyclerViewDownloadsTorrentStateItem: TextView = v.findViewById(R.id.recycler_view_downloads_torrent_state)
@@ -76,6 +48,31 @@ class RecycleViewAdapterTorrents internal constructor(context: Context?, val ite
         val pauseOrResumeButton : Button = v.findViewById(R.id.button_downloads_torrent_pause_or_resume)
         val removeButton : Button = v.findViewById(R.id.button_downloads_torrent_remove)
         val downlaodProgressBar : ProgressBar = v.findViewById(R.id.progress_bar_downloads_torrent)
+        lateinit var item : GodslayerTorrent
+        fun initialize_view_holder(items: MutableList<GodslayerTorrent>, position: Int) {
+            this.item = items[position]
+            pauseOrResumeButton.setOnClickListener { item.pause_or_resume_session() }
+            removeButton.setOnClickListener { item.stop_session() }
+            downlaodProgressBar.max = 100
+            downlaodProgressBar.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN)
+            update_view_holder()
+        }
+        fun update_view_holder() {
+            recyclerViewDownloadsTorrentEpisodeItem.text = item.episode_name
+            recyclerViewDownloadsTorrentSourceItem.text = item.source_name
+            if (item.isPaused) {
+                pauseOrResumeButton.text = "RESUME"
+            } else {
+                pauseOrResumeButton.text = "PAUSE"
+            }
+            if (item.torrent_progress == 100) {
+                recyclerViewDownloadsTorrentStateItem.text = "Finished"
+                pauseOrResumeButton.visibility = View.GONE
+            }
+            recyclerViewDownloadsTorrentStateItem.text = item.torrent_state
+            recyclerViewDownloadsTorrentProgressPercentageItem.text = item.torrent_progress.toString() + "%"
+            downlaodProgressBar.progress = item.torrent_progress
+        }
     }
 
 }
