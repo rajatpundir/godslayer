@@ -1,20 +1,25 @@
 package solutions.pundir.godslayer.Downloads.RecycleViewAdapters
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import org.jetbrains.anko.toast
 import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.R
+import java.io.File
 
-class RecycleViewAdapterTorrents internal constructor(context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrents) : RecyclerView.Adapter<RecycleViewAdapterTorrents.DownloadsItemViewHolder>() {
+class RecycleViewAdapterTorrents internal constructor(val context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrents) : RecyclerView.Adapter<RecycleViewAdapterTorrents.DownloadsItemViewHolder>() {
     private val inflater : LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsItemViewHolder {
@@ -22,8 +27,13 @@ class RecycleViewAdapterTorrents internal constructor(context: Context?, val ite
         return DownloadsItemViewHolder(itemView).listen { pos, _ ->
             val item = items.get(pos)
             // call to parent fragment here, if any.
-            println(item.toString())
-            // launch the intent open file here.
+            println(item.filename)
+            // launch the intent to open file here.
+            if (item.filename != "") {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.filename))
+                intent.setDataAndType(Uri.parse(item.filename), "video/x-matroska")
+                context?.startActivity(intent)
+            }
         }
     }
 

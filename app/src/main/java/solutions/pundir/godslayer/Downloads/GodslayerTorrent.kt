@@ -24,6 +24,7 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     internal var magnet_link_id : Long = -1
     internal var magnet_url = ""
     internal var torrent_state = "Downloading metadata..."
+    internal var filename = ""
     internal var torrent_progress = 0
     internal var isPaused = false
     lateinit var torrentUri : Uri
@@ -123,57 +124,86 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onAddTorrent")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Downloading..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Downloading..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onBlockUploaded(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onBlockUploaded")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Block Uploaded..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Block Uploaded..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onMetadataFailed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onMetadataFailed")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Failed to get metadata..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Failed to get metadata..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Metadata received..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            filename = torrentHandle.savePath() + "/" + torrentHandle.name()
+            torrent_state = "Metadata received..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Downloading..."
-        torrent_progress = (torrentSessionStatus.progress * 100).toInt()
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Downloading..."
+            torrent_progress = (torrentSessionStatus.progress * 100).toInt()
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onTorrentDeleteFailed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentDeleteFailed")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Torrent Delete Failed..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Torrent Delete Failed..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onTorrentDeleted(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentDeleted")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Torrent Deleted..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Torrent Deleted..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onTorrentError(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
@@ -192,24 +222,36 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onTorrentPaused")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Paused"
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Paused"
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onTorrentRemoved(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentRemoved")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Torrent Removed..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Torrent Removed..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
     override fun onTorrentResumed(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         println(torrentSessionStatus.progress.toString())
         println("onTorrentResumed")
         println("---------------------------------------------------------------------------------------")
-        torrent_state = "Downloading..."
-        parent_fragment.refresh_torrent_in_adapter(position)
+        doAsync {
+            torrent_state = "Downloading..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
     }
 
 }
