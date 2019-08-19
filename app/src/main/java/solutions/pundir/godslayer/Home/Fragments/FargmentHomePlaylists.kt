@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home_playlists.*
 import org.jetbrains.anko.doAsync
@@ -18,7 +19,7 @@ class FargmentHomePlaylists : Fragment() {
     internal lateinit var callback : HomeMainContainerCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var appStateHome : StateAppHome
-    internal var items = mutableListOf<Triple<Long, Long, String>>()
+    internal var items = mutableListOf<DatabaseRecord>()
     internal lateinit var adapter : RecycleViewAdapterPlaylists
 
     fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
@@ -35,8 +36,9 @@ class FargmentHomePlaylists : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var linearLayoutManager = LinearLayoutManager(context)
-        recycler_view_home_playlists.layoutManager = linearLayoutManager
+//        var linearLayoutManager = LinearLayoutManager(context)
+        var gridLayoutManager = GridLayoutManager(context, 1)
+        recycler_view_home_playlists.layoutManager = gridLayoutManager
         adapter = RecycleViewAdapterPlaylists(context, items, appStateHome, this)
         recycler_view_home_playlists.adapter = adapter
     }
@@ -49,21 +51,25 @@ class FargmentHomePlaylists : Fragment() {
             }
             val cursor = dbHandler.getPlaylistsByParent(mid, parent_id)
             cursor!!.moveToFirst()
-            var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
-            var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
-            var name = cursor.getString(cursor.getColumnIndex("NAME"))
-            items.add(Triple(module_id, rid, name))
+            var record = DatabaseRecord()
+            record.module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
+            record.rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
+            record.name = cursor.getString(cursor.getColumnIndex("NAME"))
+            record.image_url = cursor.getString(cursor.getColumnIndex("IMAGE_URL"))
+            items.add(record)
             while (cursor.moveToNext()) {
-                module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
-                rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
-                name = cursor.getString(cursor.getColumnIndex("NAME"))
-                items.add(Triple(module_id, rid, name))
+                record = DatabaseRecord()
+                record.module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
+                record.rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
+                record.name = cursor.getString(cursor.getColumnIndex("NAME"))
+                record.image_url = cursor.getString(cursor.getColumnIndex("IMAGE_URL"))
+                items.add(record)
             }
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
                 if (items.size == 1) {
-                    callback.update_episodes(module_id, rid)
+                    callback.update_episodes(record.module_id, record.rid)
                 }
             }
         }

@@ -7,5 +7,6 @@
     <Button
             android:text="Library View"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/button5"/>
+            android:layout_height="match_parent" android:id="@+id/button5"
+            style="@android:style/Widget.Material.Button.Borderless"/>
 </LinearLayout>

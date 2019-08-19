@@ -7,17 +7,13 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import org.jetbrains.anko.toast
 import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.R
-import java.io.File
 
 class RecycleViewAdapterTorrents internal constructor(val context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrents) : RecyclerView.Adapter<RecycleViewAdapterTorrents.DownloadsItemViewHolder>() {
     private val inflater : LayoutInflater = LayoutInflater.from(context)
@@ -64,16 +60,16 @@ class RecycleViewAdapterTorrents internal constructor(val context: Context?, val
             pauseOrResumeButton.setOnClickListener { item.pause_or_resume_session() }
             removeButton.setOnClickListener { item.stop_session() }
             downlaodProgressBar.max = 100
-            downlaodProgressBar.getProgressDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.SRC_IN)
+            downlaodProgressBar.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN)
             update_view_holder()
         }
         fun update_view_holder() {
             recyclerViewDownloadsTorrentEpisodeItem.text = item.episode_name
             recyclerViewDownloadsTorrentSourceItem.text = item.source_name
             if (item.isPaused) {
-                pauseOrResumeButton.text = "RESUME"
+                pauseOrResumeButton.text = "Resume"
             } else {
-                pauseOrResumeButton.text = "PAUSE"
+                pauseOrResumeButton.text = "Pause"
             }
             if (item.torrent_progress == 100) {
                 recyclerViewDownloadsTorrentStateItem.text = "Finished"

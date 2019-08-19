@@ -19,8 +19,6 @@ class FragmentSubscriptions  : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val url = "https://horriblesubs.info/wp-content/uploads/2019/04/kimetsunoyaiba.jpg"
-        Picasso.get().load(url).into(imageViewSubscriptions)
     }
 
 }
