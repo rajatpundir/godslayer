@@ -9,7 +9,7 @@
             android:layout_height="50dp"
             android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeUpperBar" android:id="@+id/fragment_home_upper_bar"/>
     <fragment
-            android:layout_weight="30"
+            android:layout_weight="32"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="solutions.pundir.godslayer.Home.Fragments.FragmentHomeMainContainer"

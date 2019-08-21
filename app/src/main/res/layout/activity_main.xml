@@ -13,9 +13,10 @@
             android:id="@+id/fragment_main_container" tools:layout_margin="0px"
             tools:layout="@layout/fragment_main_container"/>
     <fragment
-            android:layout_weight="10"
+            android:layout_weight="12"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Main.Fragments.FragmentBottomBar"
+            android:layout_height="match_parent"
+            android:name="solutions.pundir.godslayer.Main.Fragments.FragmentBottomBar"
             android:id="@+id/fragment_bottom_bar" tools:layout="@layout/fragment_bottom_bar"
             tools:layout_margin="0px"/>
 </LinearLayout>

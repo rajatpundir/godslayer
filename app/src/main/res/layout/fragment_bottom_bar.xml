@@ -2,36 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools" android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="match_parent">
 
     <Button
-            android:text="@string/inbox"
+            android:text="@string/library"
             android:layout_width="0dp"
-            android:layout_height="match_parent" android:id="@+id/button_inbox" android:layout_weight="1"
-            style="@android:style/Widget.Material.Button.Borderless" android:textAllCaps="false" android:minLines="1"/>
+            android:layout_height="match_parent" android:id="@+id/button_library" android:layout_weight="1"
+            style="@android:style/Widget.Material.Button.Borderless" android:textSize="10sp"
+            android:fontFamily="sans-serif-condensed" android:textStyle="normal" android:textAlignment="center"
+            android:textAllCaps="false" android:maxLines="1"/>
     <Button
             android:text="@string/home"
             android:layout_width="0dp"
             android:layout_height="match_parent" android:id="@+id/button_home" android:layout_weight="1"
-            android:textSize="14sp" style="@android:style/Widget.Material.Button.Borderless"
+            android:textSize="10sp" style="@android:style/Widget.Material.Button.Borderless"
             android:textAlignment="center" android:maxLines="1" android:textAllCaps="false"/>
     <Button
             android:text="@string/subscriptions"
             android:layout_width="0dp"
-            android:layout_height="match_parent" android:id="@+id/button_subscriptions" android:layout_weight="1"
-            android:textSize="14sp" style="@android:style/Widget.Material.Button.Borderless"
+            android:layout_height="match_parent" android:id="@+id/button_subscriptions" android:layout_weight="1.1"
+            android:textSize="10sp" style="@android:style/Widget.Material.Button.Borderless"
             android:textAlignment="center" android:textAllCaps="false"
             android:maxLines="1"/>
     <Button
             android:text="@string/downloads"
             android:layout_width="0dp"
             android:layout_height="match_parent" android:id="@+id/button_downloads" android:layout_weight="1"
-            style="@android:style/Widget.Material.Button.Borderless" android:textAllCaps="false" android:maxLines="1"/>
+            style="@android:style/Widget.Material.Button.Borderless" android:textAllCaps="false" android:maxLines="1"
+            android:textSize="10sp"/>
     <Button
-            android:text="@string/library"
+            android:text="@string/inbox"
             android:layout_width="0dp"
-            android:layout_height="match_parent" android:id="@+id/button_library" android:layout_weight="1"
-            style="@android:style/Widget.Material.Button.Borderless" android:textSize="14sp"
-            android:fontFamily="sans-serif-condensed" android:textStyle="normal" android:textAlignment="center"
-            android:textAllCaps="false" android:maxLines="1"/>
+            android:layout_height="match_parent" android:id="@+id/button_inbox" android:layout_weight="1"
+            style="@android:style/Widget.Material.Button.Borderless" android:textAllCaps="false" android:minLines="1"
+            android:textSize="10sp"/>
 </LinearLayout>

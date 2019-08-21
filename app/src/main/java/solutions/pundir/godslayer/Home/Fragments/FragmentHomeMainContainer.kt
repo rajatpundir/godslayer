@@ -5,6 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.billy.android.swipe.SmartSwipe
+import com.billy.android.swipe.SmartSwipeWrapper
+import com.billy.android.swipe.SwipeConsumer
+import com.billy.android.swipe.consumer.StayConsumer
+import com.billy.android.swipe.listener.SimpleSwipeListener
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.HomeCoordinator
 import solutions.pundir.godslayer.Home.StateAppHome
@@ -65,48 +70,52 @@ class FragmentHomeMainContainer : Fragment(), HomeMainContainerCoordinator {
     override fun update_modules() {
         println("UPDATE MODULES")
         stateHomeMainContainer.modules_fragment.update_recycler_view()
-        callback.generate_click_home_upper_bar_buttons("MODULES")
+        generate_click("MODULES")
     }
 
     override fun update_languages(mid: Long) {
         println("UPDATE LANGUAGES")
         stateHomeMainContainer.languages_fragment.update_recycler_view(mid)
-        callback.generate_click_home_upper_bar_buttons("LANGUAGES")
+        generate_click("LANGUAGES")
     }
 
     override fun update_platforms(mid: Long, parent_id: Long) {
         println("UPDATE PLATFORMS")
         stateHomeMainContainer.platforms_fragment.update_recycler_view(mid, parent_id)
-        callback.generate_click_home_upper_bar_buttons("PLATFORMS")
+        generate_click("PLATFORMS")
     }
 
     override fun update_publishers(mid: Long, parent_id: Long) {
         println("UPDATE PUBLISHERS")
         stateHomeMainContainer.publishers_fragment.update_recycler_view(mid, parent_id)
-        callback.generate_click_home_upper_bar_buttons("PUBLISHERS")
+        generate_click("PUBLISHERS")
     }
 
     override fun update_playlists(mid: Long, parent_id: Long) {
         println("UPDATE PLAYLISTS")
         stateHomeMainContainer.playlists_fragment.update_recycler_view(mid, parent_id)
-        callback.generate_click_home_upper_bar_buttons("PLAYLISTS")
+        generate_click("PLAYLISTS")
     }
 
     override fun update_episodes(mid: Long, parent_id: Long) {
         println("UPDATE EPISODES")
         stateHomeMainContainer.episodes_fragment.update_recycler_view(mid, parent_id)
-        callback.generate_click_home_upper_bar_buttons("EPISODES")
+        generate_click("EPISODES")
     }
 
     override fun update_sources(mid: Long, parent_id: Long) {
         println("UPDATE SOURCES")
         stateHomeMainContainer.sources_fragment.update_recycler_view(mid, parent_id)
-        callback.generate_click_home_upper_bar_buttons("SOURCES")
+        generate_click("SOURCES")
     }
 
     override fun download_source(mid: Long, rid: Long) {
         println("DOWNLOAD SOURCE")
         callback.download_source(mid, rid)
+    }
+
+    override fun generate_click(button_name : String) {
+        callback.generate_click_home_upper_bar_buttons(button_name)
     }
 
 }

@@ -1,12 +1,15 @@
 package solutions.pundir.godslayer.Home.Fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.billy.android.swipe.SmartSwipe
+import com.billy.android.swipe.SmartSwipeWrapper
+import com.billy.android.swipe.SwipeConsumer
+import com.billy.android.swipe.consumer.StayConsumer
+import com.billy.android.swipe.listener.SimpleSwipeListener
 import kotlinx.android.synthetic.main.fragment_home_playlists.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -36,11 +39,21 @@ class FargmentHomePlaylists : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        var linearLayoutManager = LinearLayoutManager(context)
-        var gridLayoutManager = GridLayoutManager(context, 1)
+        var gridLayoutManager = GridLayoutManager(context, 3)
         recycler_view_home_playlists.layoutManager = gridLayoutManager
         adapter = RecycleViewAdapterPlaylists(context, items, appStateHome, this)
         recycler_view_home_playlists.adapter = adapter
+        SmartSwipe.wrap(recycler_view_home_playlists)
+            .addConsumer(StayConsumer())
+            .enableHorizontal()
+            .addListener(object : SimpleSwipeListener() {
+                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
+                    when (direction) {
+                        1 -> callback.generate_click("PUBLISHERS")
+                        2 -> callback.generate_click("EPISODES")
+                    }
+                }
+            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {

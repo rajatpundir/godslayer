@@ -6,6 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.billy.android.swipe.SmartSwipe
+import com.billy.android.swipe.SmartSwipeWrapper
+import com.billy.android.swipe.SwipeConsumer
+import com.billy.android.swipe.consumer.StayConsumer
+import com.billy.android.swipe.listener.SimpleSwipeListener
 import kotlinx.android.synthetic.main.fragment_home_platforms.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -39,6 +44,17 @@ class FargmentHomePlatforms : Fragment() {
         recycler_view_home_platforms.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterPlatforms(context, items, appStateHome, this)
         recycler_view_home_platforms.adapter = adapter
+        SmartSwipe.wrap(recycler_view_home_platforms)
+            .addConsumer(StayConsumer())
+            .enableHorizontal()
+            .addListener(object : SimpleSwipeListener() {
+                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
+                    when (direction) {
+                        1 -> callback.generate_click("LANGUAGES")
+                        2 -> callback.generate_click("PUBLISHERS")
+                    }
+                }
+            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {

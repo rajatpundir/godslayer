@@ -6,6 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.billy.android.swipe.SmartSwipe
+import com.billy.android.swipe.SmartSwipeWrapper
+import com.billy.android.swipe.SwipeConsumer
+import com.billy.android.swipe.consumer.StayConsumer
+import com.billy.android.swipe.listener.SimpleSwipeListener
 import kotlinx.android.synthetic.main.fragment_home_episodes.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -39,6 +44,17 @@ class FargmentHomeEpisodes : Fragment() {
         recycler_view_home_episodes.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterEpisodes(context, items, appStateHome, this)
         recycler_view_home_episodes.adapter = adapter
+        SmartSwipe.wrap(recycler_view_home_episodes)
+            .addConsumer(StayConsumer())
+            .enableHorizontal()
+            .addListener(object : SimpleSwipeListener() {
+                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
+                    when (direction) {
+                        1 -> callback.generate_click("PLAYLISTS")
+                        2 -> callback.generate_click("SOURCES")
+                    }
+                }
+            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {
