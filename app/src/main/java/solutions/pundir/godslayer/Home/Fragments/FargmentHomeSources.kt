@@ -6,11 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.billy.android.swipe.SmartSwipe
-import com.billy.android.swipe.SmartSwipeWrapper
-import com.billy.android.swipe.SwipeConsumer
-import com.billy.android.swipe.consumer.StayConsumer
-import com.billy.android.swipe.listener.SimpleSwipeListener
 import kotlinx.android.synthetic.main.fragment_home_sources.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread

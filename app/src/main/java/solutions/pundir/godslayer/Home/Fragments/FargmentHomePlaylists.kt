@@ -5,11 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.billy.android.swipe.SmartSwipe
-import com.billy.android.swipe.SmartSwipeWrapper
-import com.billy.android.swipe.SwipeConsumer
-import com.billy.android.swipe.consumer.StayConsumer
-import com.billy.android.swipe.listener.SimpleSwipeListener
 import kotlinx.android.synthetic.main.fragment_home_playlists.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread

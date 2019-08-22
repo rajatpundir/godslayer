@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:padding="4dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/some_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
 
     <TextView
             android:id="@+id/recycler_view_home_item_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible" android:textStyle="bold" android:text="Something" android:textSize="30sp"/>
+            android:text="Something"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package solutions.pundir.godslayer.Downloads.Fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class FragmentDownloadsMainContainer : Fragment(), FragmentDownloadsMainContaine
             viewPager.adapter = adapter
         }
         viewPager.setOffscreenPageLimit(2)
+        fragmentDownloadsMainContainerViewPagerHeader.tabIndicatorColor = Color.RED
     }
 
     override fun download_source(mid: Long, rid: Long) {
