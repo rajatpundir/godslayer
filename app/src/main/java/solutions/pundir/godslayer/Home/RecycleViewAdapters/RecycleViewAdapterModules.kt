@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 import solutions.pundir.godslayer.Home.Fragments.FargmentHomeModules
 
-class RecycleViewAdapterModules internal constructor(context: Context?, val items: MutableList<Pair<Long, String>>, val appStateHome : StateAppHome, val parent_fragment : FargmentHomeModules) : RecyclerView.Adapter<RecycleViewAdapterModules.HomeItemViewHolder>() {
+class RecycleViewAdapterModules internal constructor(context: Context?, val items: MutableList<Pair<Long, String>>, val parent_fragment : FargmentHomeModules) : RecyclerView.Adapter<RecycleViewAdapterModules.HomeItemViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_home, parent, false)
         return HomeItemViewHolder(itemView).listen { pos, _ ->
             val item = items.get(pos)
-            appStateHome.set_module_id(item.first)
             parent_fragment.update_languages_via_parent(item.first)
         }
     }

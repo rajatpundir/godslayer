@@ -6,18 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 import solutions.pundir.godslayer.Home.Fragments.FargmentHomePublishers
 
-class RecycleViewAdapterPublishers internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome, val parent_fragment : FargmentHomePublishers) : RecyclerView.Adapter<RecycleViewAdapterPublishers.HomeItemViewHolder>() {
+class RecycleViewAdapterPublishers internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val parent_fragment : FargmentHomePublishers) : RecyclerView.Adapter<RecycleViewAdapterPublishers.HomeItemViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_home, parent, false)
         return HomeItemViewHolder(itemView).listen { pos, _ ->
             val item = items.get(pos)
-            appStateHome.set_publisher_id(item.first, item.second)
             parent_fragment.update_playlists_via_parent(item.first, item.second)
         }
     }

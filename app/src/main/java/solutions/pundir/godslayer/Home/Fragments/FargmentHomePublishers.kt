@@ -16,20 +16,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterPublishers
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class FargmentHomePublishers : Fragment() {
-    internal lateinit var callback : HomeMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
+class FargmentHomePublishers(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
+    internal lateinit var callback : HomeMainContainerFragmentsCoordinator
     internal var items = mutableListOf<Triple<Long, Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterPublishers
 
-    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerFragmentsCoordinator) {
         this.callback = callback
-        this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE PUBLISHERS")
     }
 
@@ -42,19 +37,8 @@ class FargmentHomePublishers : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_publishers.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterPublishers(context, items, appStateHome, this)
+        adapter = RecycleViewAdapterPublishers(context, items, this)
         recycler_view_home_publishers.adapter = adapter
-        SmartSwipe.wrap(recycler_view_home_publishers)
-            .addConsumer(StayConsumer())
-            .enableHorizontal()
-            .addListener(object : SimpleSwipeListener() {
-                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
-                    when (direction) {
-                        1 -> callback.generate_click("PLATFORMS")
-                        2 -> callback.generate_click("PLAYLISTS")
-                    }
-                }
-            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {

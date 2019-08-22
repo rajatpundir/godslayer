@@ -13,7 +13,6 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
-import java.text.FieldPosition
 
 class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrents) : TorrentSessionListener{
     internal var module_id = mid

@@ -7,24 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_downloads_torrents.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.Downloads.RecycleViewAdapters.RecycleViewAdapterTorrents
 import solutions.pundir.godslayer.R
 import solutions.pundir.godslayer.Downloads.RecycleViewAdapters.RecycleViewAdapterTorrents.DownloadsItemViewHolder
 
-class FragmentDownloadsTorrents : Fragment() {
-    internal lateinit var callback : FragmentDownloadsMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
+class FragmentDownloadsTorrents(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
     internal var items = mutableListOf<GodslayerTorrent>()
     internal lateinit var adapter : RecycleViewAdapterTorrents
-
-    fun callback_from_parent(callback : FragmentDownloadsMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper) {
-        this.callback = callback
-        this.dbHandler = dbHandler
-        println("INSIDE TORRENTS")
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_downloads_torrents, container, false)
@@ -48,9 +42,13 @@ class FragmentDownloadsTorrents : Fragment() {
             }
         }
         if (check) {
-            context?.let { GodslayerTorrent(it, dbHandler, mid, rid, this@FragmentDownloadsTorrents) }?.let { items.add(it) }
-            items.last().callback_from_parent_fragment(items.size - 1)
-            adapter.notifyDataSetChanged()
+            doAsync {
+                context?.let { GodslayerTorrent(it, dbHandler, mid, rid, this@FragmentDownloadsTorrents) }?.let { items.add(it) }
+                items.last().callback_from_parent_fragment(items.size - 1)
+                uiThread {
+                    adapter.notifyDataSetChanged()
+                }
+            }
         } else {
             context?.toast("Already present in the Downloads Queue.")
         }

@@ -15,20 +15,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterPlaylists
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class FargmentHomePlaylists : Fragment() {
-    internal lateinit var callback : HomeMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
+class FargmentHomePlaylists(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
+    internal lateinit var callback : HomeMainContainerFragmentsCoordinator
     internal var items = mutableListOf<DatabaseRecord>()
     internal lateinit var adapter : RecycleViewAdapterPlaylists
 
-    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerFragmentsCoordinator) {
         this.callback = callback
-        this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE PLAYLISTS")
     }
 
@@ -41,19 +36,8 @@ class FargmentHomePlaylists : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var gridLayoutManager = GridLayoutManager(context, 3)
         recycler_view_home_playlists.layoutManager = gridLayoutManager
-        adapter = RecycleViewAdapterPlaylists(context, items, appStateHome, this)
+        adapter = RecycleViewAdapterPlaylists(context, items, this)
         recycler_view_home_playlists.adapter = adapter
-        SmartSwipe.wrap(recycler_view_home_playlists)
-            .addConsumer(StayConsumer())
-            .enableHorizontal()
-            .addListener(object : SimpleSwipeListener() {
-                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
-                    when (direction) {
-                        1 -> callback.generate_click("PUBLISHERS")
-                        2 -> callback.generate_click("EPISODES")
-                    }
-                }
-            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {

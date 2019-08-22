@@ -4,82 +4,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-            android:orientation="vertical"
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/fragmentHomeMainContainerViewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_modules"
-            android:visibility="visible">
-        <fragment
+            android:layout_height="match_parent">
+        <androidx.viewpager.widget.PagerTabStrip
+                android:id="@+id/fragmentHomeMainContainerViewPagerHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomeModules"
-                android:id="@+id/fragment_home_modules"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_languages"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomeLanguages"
-                android:id="@+id/fragment_home_languages"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_platforms"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomePlatforms"
-                android:id="@+id/fragment_home_platforms"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_publishers"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomePublishers"
-                android:id="@+id/fragment_home_publishers"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_playlists"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomePlaylists"
-                android:id="@+id/fragment_home_playlists"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_episodes"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomeEpisodes"
-                android:id="@+id/fragment_home_episodes"/>
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_home_sources"
-            android:visibility="gone">
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="solutions.pundir.godslayer.Home.Fragments.FargmentHomeSources"
-                android:id="@+id/fragment_home_sources"/>
-    </LinearLayout>
+                android:layout_gravity="top"
+                android:background="@color/colorPrimary"
+                android:padding="13dp"/>
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

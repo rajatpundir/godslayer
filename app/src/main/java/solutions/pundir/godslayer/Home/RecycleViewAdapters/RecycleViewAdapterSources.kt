@@ -8,17 +8,15 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import solutions.pundir.godslayer.Home.Fragments.FargmentHomeSources
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class RecycleViewAdapterSources internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val appStateHome : StateAppHome, val parent_fragment : FargmentHomeSources) : RecyclerView.Adapter<RecycleViewAdapterSources.HomeItemViewHolder>() {
+class RecycleViewAdapterSources internal constructor(context: Context?, val items: MutableList<Triple<Long, Long, String>>, val parent_fragment : FargmentHomeSources) : RecyclerView.Adapter<RecycleViewAdapterSources.HomeItemViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder {
         val itemView = inflater.inflate(R.layout.recycler_view_item_home_source, parent, false)
         return HomeItemViewHolder(itemView).listen { pos, _ ->
             val item = items.get(pos)
-            appStateHome.set_source_id(item.first, item.second)
         }
     }
 

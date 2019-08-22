@@ -5,7 +5,7 @@
               android:layout_height="match_parent">
 
     <Button
-            android:text="Inbox View"
+            android:text="Trending View"
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:id="@+id/button4"
             style="@android:style/Widget.Material.Button.Borderless"/>

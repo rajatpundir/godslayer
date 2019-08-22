@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Godslayer</string>
     <string name="download">Download</string>
-    <string name="inbox">Inbox</string>
+    <string name="inbox">Trending</string>
     <string name="home">Home</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="downloads">Downloads</string>

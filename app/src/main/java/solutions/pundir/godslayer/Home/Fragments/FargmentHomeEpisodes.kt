@@ -16,20 +16,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterEpisodes
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class FargmentHomeEpisodes : Fragment() {
-    internal lateinit var callback : HomeMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
+class FargmentHomeEpisodes(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
+    internal lateinit var callback : HomeMainContainerFragmentsCoordinator
     internal var items = mutableListOf<Triple<Long, Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterEpisodes
 
-    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerFragmentsCoordinator) {
         this.callback = callback
-        this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE EPISODES")
     }
 
@@ -42,7 +37,7 @@ class FargmentHomeEpisodes : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_episodes.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterEpisodes(context, items, appStateHome, this)
+        adapter = RecycleViewAdapterEpisodes(context, items, this)
         recycler_view_home_episodes.adapter = adapter
         SmartSwipe.wrap(recycler_view_home_episodes)
             .addConsumer(StayConsumer())

@@ -16,20 +16,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterLanguages
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class FargmentHomeLanguages : Fragment() {
-    internal lateinit var callback : HomeMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
+class FargmentHomeLanguages(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
+    internal lateinit var callback : HomeMainContainerFragmentsCoordinator
     internal var items = mutableListOf<Triple<Long, Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterLanguages
 
-    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerFragmentsCoordinator) {
         this.callback = callback
-        this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE LANGUAGES")
     }
 
@@ -42,19 +37,8 @@ class FargmentHomeLanguages : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_languages.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterLanguages(context, items, appStateHome, this)
+        adapter = RecycleViewAdapterLanguages(context, items, this)
         recycler_view_home_languages.adapter = adapter
-        SmartSwipe.wrap(recycler_view_home_languages)
-            .addConsumer(StayConsumer())
-            .enableHorizontal()
-            .addListener(object : SimpleSwipeListener() {
-                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
-                    when (direction) {
-                        1 -> callback.generate_click("MODULES")
-                        2 -> callback.generate_click("PLATFORMS")
-                    }
-                }
-            } )
     }
 
     fun update_recycler_view(mid : Long) {

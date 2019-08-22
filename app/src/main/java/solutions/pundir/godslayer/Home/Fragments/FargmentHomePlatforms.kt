@@ -16,20 +16,15 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.RecycleViewAdapters.RecycleViewAdapterPlatforms
-import solutions.pundir.godslayer.Home.StateAppHome
 import solutions.pundir.godslayer.R
 
-class FargmentHomePlatforms : Fragment() {
-    internal lateinit var callback : HomeMainContainerCoordinator
-    internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
+class FargmentHomePlatforms(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
+    internal lateinit var callback : HomeMainContainerFragmentsCoordinator
     internal var items = mutableListOf<Triple<Long, Long, String>>()
     internal lateinit var adapter : RecycleViewAdapterPlatforms
 
-    fun callback_from_parent(callback : HomeMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeMainContainerFragmentsCoordinator) {
         this.callback = callback
-        this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE PLATFORMS")
     }
 
@@ -42,19 +37,8 @@ class FargmentHomePlatforms : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var linearLayoutManager = LinearLayoutManager(context)
         recycler_view_home_platforms.layoutManager = linearLayoutManager
-        adapter = RecycleViewAdapterPlatforms(context, items, appStateHome, this)
+        adapter = RecycleViewAdapterPlatforms(context, items, this)
         recycler_view_home_platforms.adapter = adapter
-        SmartSwipe.wrap(recycler_view_home_platforms)
-            .addConsumer(StayConsumer())
-            .enableHorizontal()
-            .addListener(object : SimpleSwipeListener() {
-                override fun onSwipeOpened(wrapper: SmartSwipeWrapper?, consumer: SwipeConsumer?, direction: Int) {
-                    when (direction) {
-                        1 -> callback.generate_click("LANGUAGES")
-                        2 -> callback.generate_click("PUBLISHERS")
-                    }
-                }
-            } )
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {

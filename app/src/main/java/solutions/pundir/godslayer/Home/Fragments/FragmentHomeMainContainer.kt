@@ -1,32 +1,24 @@
 package solutions.pundir.godslayer.Home.Fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.billy.android.swipe.SmartSwipe
-import com.billy.android.swipe.SmartSwipeWrapper
-import com.billy.android.swipe.SwipeConsumer
-import com.billy.android.swipe.consumer.StayConsumer
-import com.billy.android.swipe.listener.SimpleSwipeListener
+import kotlinx.android.synthetic.main.fragment_home_main_container.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Home.HomeCoordinator
-import solutions.pundir.godslayer.Home.StateAppHome
-import solutions.pundir.godslayer.Home.StateHomeMainContainer
-import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
+import solutions.pundir.godslayer.Home.ViewPagerAdapters.ViewPagerAdapterHomeMainContainerFragments
 import solutions.pundir.godslayer.R
 
 class FragmentHomeMainContainer : Fragment(), HomeMainContainerCoordinator {
     internal lateinit var callback : HomeCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
-    internal lateinit var appStateHome : StateAppHome
-    internal val stateHomeMainContainer = StateHomeMainContainer()
 
-    fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper, appStateHome : StateAppHome) {
+    fun callback_from_parent(callback : HomeCoordinator, dbHandler : GodslayerDBOpenHelper) {
         this.callback = callback
         this.dbHandler = dbHandler
-        this.appStateHome = appStateHome
         println("INSIDE HOME CONTAINER")
     }
 
@@ -35,78 +27,15 @@ class FragmentHomeMainContainer : Fragment(), HomeMainContainerCoordinator {
         return v
     }
 
-    override fun onAttachFragment(childFragment: Fragment?) {
-        super.onAttachFragment(childFragment)
-        if (childFragment is FargmentHomeModules) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.modules_fragment = childFragment
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val viewPager = fragmentHomeMainContainerViewPager
+        if (viewPager != null) {
+            val adapter = fragmentManager?.let { ViewPagerAdapterHomeMainContainerFragments(it, dbHandler, this) }
+            viewPager.adapter = adapter
         }
-        if (childFragment is FargmentHomeLanguages) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.languages_fragment = childFragment
-        }
-        if (childFragment is FargmentHomePlatforms) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.platforms_fragment = childFragment
-        }
-        if (childFragment is FargmentHomePublishers) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.publishers_fragment = childFragment
-        }
-        if (childFragment is FargmentHomePlaylists) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.playlists_fragment = childFragment
-        }
-        if (childFragment is FargmentHomeEpisodes) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.episodes_fragment = childFragment
-        }
-        if (childFragment is FargmentHomeSources) {
-            childFragment.callback_from_parent(this, dbHandler, appStateHome)
-            stateHomeMainContainer.sources_fragment = childFragment
-        }
-    }
-
-    override fun update_modules() {
-        println("UPDATE MODULES")
-        stateHomeMainContainer.modules_fragment.update_recycler_view()
-        generate_click("MODULES")
-    }
-
-    override fun update_languages(mid: Long) {
-        println("UPDATE LANGUAGES")
-        stateHomeMainContainer.languages_fragment.update_recycler_view(mid)
-        generate_click("LANGUAGES")
-    }
-
-    override fun update_platforms(mid: Long, parent_id: Long) {
-        println("UPDATE PLATFORMS")
-        stateHomeMainContainer.platforms_fragment.update_recycler_view(mid, parent_id)
-        generate_click("PLATFORMS")
-    }
-
-    override fun update_publishers(mid: Long, parent_id: Long) {
-        println("UPDATE PUBLISHERS")
-        stateHomeMainContainer.publishers_fragment.update_recycler_view(mid, parent_id)
-        generate_click("PUBLISHERS")
-    }
-
-    override fun update_playlists(mid: Long, parent_id: Long) {
-        println("UPDATE PLAYLISTS")
-        stateHomeMainContainer.playlists_fragment.update_recycler_view(mid, parent_id)
-        generate_click("PLAYLISTS")
-    }
-
-    override fun update_episodes(mid: Long, parent_id: Long) {
-        println("UPDATE EPISODES")
-        stateHomeMainContainer.episodes_fragment.update_recycler_view(mid, parent_id)
-        generate_click("EPISODES")
-    }
-
-    override fun update_sources(mid: Long, parent_id: Long) {
-        println("UPDATE SOURCES")
-        stateHomeMainContainer.sources_fragment.update_recycler_view(mid, parent_id)
-        generate_click("SOURCES")
+        viewPager.setOffscreenPageLimit(7)
+        fragmentHomeMainContainerViewPagerHeader.tabIndicatorColor = Color.RED
     }
 
     override fun download_source(mid: Long, rid: Long) {
@@ -115,7 +44,14 @@ class FragmentHomeMainContainer : Fragment(), HomeMainContainerCoordinator {
     }
 
     override fun generate_click(button_name : String) {
-        callback.generate_click_home_upper_bar_buttons(button_name)
+        when(button_name) {
+            "MODULES" -> fragmentHomeMainContainerViewPager.currentItem = 0
+            "LANGUAGES" -> fragmentHomeMainContainerViewPager.currentItem = 1
+            "PLATFORMS" -> fragmentHomeMainContainerViewPager.currentItem = 2
+            "PUBLISHERS" -> fragmentHomeMainContainerViewPager.currentItem = 3
+            "PLAYLISTS" -> fragmentHomeMainContainerViewPager.currentItem = 4
+            "EPISODES" -> fragmentHomeMainContainerViewPager.currentItem = 5
+            "SOURCES" -> fragmentHomeMainContainerViewPager.currentItem = 6
+        }
     }
-
 }
