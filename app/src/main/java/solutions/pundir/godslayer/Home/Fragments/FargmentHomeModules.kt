@@ -35,6 +35,7 @@ class FargmentHomeModules(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
         adapter = RecycleViewAdapterModules(context, items, this)
         recycler_view_home_modules.adapter = adapter
         update_recycler_view()
+        recycler_view_home_modules_header.attachTo(recycler_view_home_modules)
     }
 
     fun update_recycler_view() {
@@ -42,6 +43,7 @@ class FargmentHomeModules(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             items.clear()
             uiThread {
                 adapter.notifyDataSetChanged()
+                recycler_view_home_modules_header_text_view.text = "Bitchain"
             }
             val cursor = dbHandler.getModules()
             cursor!!.moveToFirst()

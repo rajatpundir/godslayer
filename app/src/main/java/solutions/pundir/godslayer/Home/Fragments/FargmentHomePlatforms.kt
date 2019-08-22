@@ -34,6 +34,7 @@ class FargmentHomePlatforms(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
         recycler_view_home_platforms.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterPlatforms(context, items, this)
         recycler_view_home_platforms.adapter = adapter
+        recycler_view_home_platforms_header.attachTo(recycler_view_home_platforms)
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {
@@ -42,7 +43,14 @@ class FargmentHomePlatforms(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             uiThread {
                 adapter.notifyDataSetChanged()
             }
-            val cursor = dbHandler.getPlatformsByParent(mid, parent_id)
+            var cursor = dbHandler.getLanguage(mid, parent_id)
+            cursor!!.moveToFirst()
+            var title = cursor.getString(cursor.getColumnIndex("NAME"))
+            uiThread {
+                recycler_view_home_platforms_header_text_view.text = title
+            }
+            cursor.close()
+            cursor = dbHandler.getPlatformsByParent(mid, parent_id)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()

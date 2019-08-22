@@ -34,6 +34,7 @@ class FargmentHomeEpisodes(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
         recycler_view_home_episodes.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterEpisodes(context, items, this)
         recycler_view_home_episodes.adapter = adapter
+        recycler_view_home_episodes_header.attachTo(recycler_view_home_episodes)
     }
 
     fun update_recycler_view(mid : Long, parent_id: Long) {
@@ -42,7 +43,14 @@ class FargmentHomeEpisodes(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             uiThread {
                 adapter.notifyDataSetChanged()
             }
-            val cursor = dbHandler.getEpisodesByParent(mid, parent_id)
+            var cursor = dbHandler.getPlaylist(mid, parent_id)
+            cursor!!.moveToFirst()
+            var title = cursor.getString(cursor.getColumnIndex("NAME"))
+            uiThread {
+                recycler_view_home_episodes_header_text_view.text = title
+            }
+            cursor.close()
+            cursor = dbHandler.getEpisodesByParent(mid, parent_id)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()

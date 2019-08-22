@@ -30,6 +30,11 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM MODULES ORDER BY ID DESC", null)
     }
 
+    fun getModule(rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM MODULES WHERE ID = ${rid} ORDER BY ID DESC", null)
+    }
+
     fun getLanguages() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM LANGUAGES ORDER BY ID DESC", null)
@@ -38,6 +43,11 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
     fun getLanguagesByParent(mid : Long) : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM LANGUAGES WHERE MODULE_ID = ${mid} ORDER BY ID DESC", null)
+    }
+
+    fun getLanguage(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM LANGUAGES WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC", null)
     }
 
     fun getPlatforms() : Cursor? {
@@ -50,6 +60,11 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM PLATFORMS WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
+    fun getPlatform(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PLATFORMS WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC", null)
+    }
+
     fun getPublishers() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM PUBLISHERS ORDER BY ID DESC", null)
@@ -60,9 +75,19 @@ class GodslayerDBOpenHelper(context: Context, factory: SQLiteDatabase.CursorFact
         return db.rawQuery("SELECT * FROM PUBLISHERS WHERE MODULE_ID = ${mid} AND PARENT_ID = ${parent_id} ORDER BY ID DESC", null)
     }
 
+    fun getPublisher(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PUBLISHERS WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC", null)
+    }
+
     fun getPlaylists() : Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM PLAYLISTS ORDER BY ID ASC", null)
+    }
+
+    fun getPlaylist(mid : Long, rid : Long) : Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM PLAYLISTS WHERE MODULE_ID = ${mid} AND ID = ${rid} ORDER BY ID DESC LIMIT 1", null)
     }
 
     fun getPlaylistsByParent(mid : Long, parent_id : Long) : Cursor? {

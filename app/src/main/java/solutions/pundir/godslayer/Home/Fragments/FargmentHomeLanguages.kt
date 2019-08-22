@@ -34,6 +34,7 @@ class FargmentHomeLanguages(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
         recycler_view_home_languages.layoutManager = linearLayoutManager
         adapter = RecycleViewAdapterLanguages(context, items, this)
         recycler_view_home_languages.adapter = adapter
+        recycler_view_home_languages_header.attachTo(recycler_view_home_languages)
     }
 
     fun update_recycler_view(mid : Long) {
@@ -42,7 +43,14 @@ class FargmentHomeLanguages(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             uiThread {
                 adapter.notifyDataSetChanged()
             }
-            val cursor = dbHandler.getLanguagesByParent(mid)
+            var cursor = dbHandler.getModule(mid)
+            cursor!!.moveToFirst()
+            var title = cursor.getString(cursor.getColumnIndex("NAME"))
+            uiThread {
+                recycler_view_home_languages_header_text_view.text = title
+            }
+            cursor.close()
+            cursor = dbHandler.getLanguagesByParent(mid)
             cursor!!.moveToFirst()
             var module_id = cursor.getString(cursor.getColumnIndex("MODULE_ID")).toLong()
             var rid = cursor.getString(cursor.getColumnIndex("ID")).toLong()
