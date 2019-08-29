@@ -4,8 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import solutions.pundir.godslayer.Home.Fragments.FargmentHomeSources
 import solutions.pundir.godslayer.R
@@ -30,13 +29,15 @@ class RecycleViewAdapterSources internal constructor(context: Context?, val item
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
-        holder.recyclerViewHomeSourceItem.text = items[position].third
-        holder.downloadButton.setOnClickListener { parent_fragment.download_source_via_parent(items[position].first, items[position].second) }
+        holder.recyclerViewHomeSourceItemCheckbox.text = items[position].third
+        holder.mid = items[position].first
+        holder.rid = items[position].second
     }
 
-    inner class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
-        val recyclerViewHomeSourceItem: TextView = v.findViewById(R.id.recycler_view_home_source_item)
-        val downloadButton : Button = v.findViewById(R.id.button_home_source_download)
+    class HomeItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
+        val recyclerViewHomeSourceItemCheckbox : CheckBox = v.findViewById(R.id.recycler_view_home_source_item_checkbox)
+        var mid = 0L
+        var rid = 0L
     }
 
 }

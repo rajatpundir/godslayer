@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home_sources.*
@@ -35,6 +36,7 @@ class FargmentHomeSources(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
         adapter = RecycleViewAdapterSources(context, items, this)
         recycler_view_home_sources.adapter = adapter
         recycler_view_home_sources_header.attachTo(recycler_view_home_sources)
+        recycler_view_home_sources_download_button.setOnClickListener { download_source_via_parent() }
     }
 
     fun update_recycler_view(mid : Long, parent_id : Long) {
@@ -42,6 +44,7 @@ class FargmentHomeSources(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             items.clear()
             uiThread {
                 adapter.notifyDataSetChanged()
+                recycler_view_home_sources_download_button.visibility = View.GONE
             }
             var cursor = dbHandler.getEpisode(mid, parent_id)
             cursor!!.moveToFirst()
@@ -64,12 +67,20 @@ class FargmentHomeSources(val dbHandler: GodslayerDBOpenHelper) : Fragment() {
             cursor.close()
             uiThread {
                 adapter.notifyDataSetChanged()
+                if (items.size > 0) {
+                    recycler_view_home_sources_download_button.visibility = View.VISIBLE
+                }
             }
         }
     }
 
-    fun download_source_via_parent(mid : Long, rid : Long) {
-        callback.download_source(mid, rid)
+    fun download_source_via_parent() {
+        for (i in 0..(recycler_view_home_sources.childCount - 1)) {
+            var holder = recycler_view_home_sources.findViewHolderForAdapterPosition(i) as RecycleViewAdapterSources.HomeItemViewHolder
+            if (holder.recyclerViewHomeSourceItemCheckbox.isChecked) {
+                callback.download_source(holder.mid, holder.rid)
+            }
+        }
     }
 
 }
