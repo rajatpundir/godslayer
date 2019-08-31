@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import com.frostwire.jlibtorrent.TorrentHandle
+import com.frostwire.jlibtorrent.TorrentInfo
 import com.masterwok.simpletorrentandroid.TorrentSession
 import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import com.masterwok.simpletorrentandroid.contracts.TorrentSessionListener
@@ -172,6 +173,97 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
+        println("torrentHandle.torrentFile().name()")
+        println(torrentHandle.torrentFile().name())
+        println("torrentHandle.torrentFile().numFiles()")
+        println(torrentHandle.torrentFile().numFiles())
+        println("torrentHandle.torrentFile().numPieces()")
+        println(torrentHandle.torrentFile().numPieces())
+        println("torrentHandle.torrentFile().pieceLength()")
+        println(torrentHandle.torrentFile().pieceLength())
+        println("torrentHandle.torrentFile().totalSize()")
+        println(torrentHandle.torrentFile().totalSize())
+        println("torrentHandle.downloadLimit")
+        println(torrentHandle.downloadLimit)
+        println("torrentHandle.uploadLimit")
+        println(torrentHandle.uploadLimit)
+        println("torrentHandle.swig().max_connections()")
+        println(torrentHandle.swig().max_connections())
+        println("torrentHandle.swig().max_uploads()")
+        println(torrentHandle.swig().max_uploads())
+        println("torrentHandle.swig().status()._active_duration")
+        println(torrentHandle.swig().status()._active_duration)
+        println("torrentHandle.swig().status()._finished_duration")
+        println(torrentHandle.swig().status()._finished_duration)
+        println("torrentHandle.swig().status()._last_download")
+        println(torrentHandle.swig().status()._last_download)
+        println("torrentHandle.swig().status()._last_upload")
+        println(torrentHandle.swig().status()._last_upload)
+        println("torrentHandle.swig().status()._next_announce")
+        println(torrentHandle.swig().status()._next_announce)
+        println("torrentHandle.swig().status()._queue_position")
+        println(torrentHandle.swig().status()._queue_position)
+        println("torrentHandle.swig().status()._seeding_duration")
+        println(torrentHandle.swig().status()._seeding_duration)
+        println("torrentHandle.swig().status().added_time")
+        println(torrentHandle.swig().status().added_time)
+        println("torrentHandle.swig().status().all_time_download")
+        println(torrentHandle.swig().status().all_time_download)
+        println("torrentHandle.swig().status().all_time_upload")
+        println(torrentHandle.swig().status().all_time_upload)
+        println("torrentHandle.swig().status().announcing_to_dht")
+        println(torrentHandle.swig().status().announcing_to_dht)
+        println("torrentHandle.swig().status().announcing_to_lsd")
+        println(torrentHandle.swig().status().announcing_to_lsd)
+        println("torrentHandle.swig().status().announcing_to_trackers")
+        println(torrentHandle.swig().status().announcing_to_trackers)
+        println("torrentHandle.swig().status().block_size")
+        println(torrentHandle.swig().status().block_size)
+        println("torrentHandle.swig().status().completed_time")
+        println(torrentHandle.swig().status().completed_time)
+        println("torrentHandle.swig().status().connect_candidates")
+        println(torrentHandle.swig().status().connect_candidates)
+        println("torrentHandle.swig().status().connections_limit")
+        println(torrentHandle.swig().status().connections_limit)
+        println("torrentHandle.swig().status().current_tracker")
+        println(torrentHandle.swig().status().current_tracker)
+        println("torrentHandle.swig().status().list_peers")
+        println(torrentHandle.swig().status().list_peers)
+        println("torrentHandle.swig().status().list_seeds")
+        println(torrentHandle.swig().status().list_seeds)
+        println("torrentHandle.swig().status().progress_ppm")
+        println(torrentHandle.swig().status().progress_ppm)
+        println("torrentHandle.swig().status().save_path")
+        println(torrentHandle.swig().status().save_path)
+        println("torrentHandle.swig().status().seed_rank")
+        println(torrentHandle.swig().status().seed_rank)
+        println("torrentHandle.swig().status().verified_pieces")
+        println(torrentHandle.swig().status().verified_pieces)
+        println("torrentSession.downloadRate")
+        println(torrentSession.downloadRate)
+        println("torrentSession.uploadRate")
+        println(torrentSession.uploadRate)
+        println("torrentHandle.fileProgress()")
+        var count = 0
+        for(i in torrentHandle.fileProgress()) {
+            println(count)
+            println(i)
+            count += 1
+        }
+        println("torrentHandle.filePriorities()")
+        count = 0
+        for(i in torrentHandle.filePriorities()) {
+            println(count)
+            println(i.swig().toString())
+            count += 1
+        }
+        println("torrentHandle.torrentFile().files().paths()")
+        count = 0
+        for( i in torrentHandle.torrentFile().files().paths()) {
+            println(count)
+            println(i)
+            count += 1
+        }
         doAsync {
             torrent_state = "Downloading..."
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()
@@ -221,6 +313,7 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onTorrentPaused")
         println("---------------------------------------------------------------------------------------")
+        torrentHandle.saveResumeData()
         doAsync {
             torrent_state = "Paused"
             uiThread {
