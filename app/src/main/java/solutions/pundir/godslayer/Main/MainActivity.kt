@@ -27,6 +27,7 @@ import solutions.pundir.godslayer.R
 class MainActivity : AppCompatActivity(), MasterCoordinator {
     private val fragmentStateApp = StateFragmentsApp()
     lateinit var dbHandler : GodslayerDBOpenHelper
+    lateinit var fragmentMainContainer: FragmentMainContainer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         moveDatabaseFromAssetsToCache()
@@ -41,15 +42,13 @@ class MainActivity : AppCompatActivity(), MasterCoordinator {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
         }
-        //var t = GodslayerTorrent(this, dbHandler, 4962685108190249448, 62321)
-
-
     }
 
     override fun onAttachFragment(fragment: Fragment?) {
         super.onAttachFragment(fragment)
         if (fragment is FragmentMainContainer) {
-            fragment.callback_from_parent(this, dbHandler)
+            fragmentMainContainer = fragment
+            fragmentMainContainer.callback_from_parent(this, dbHandler)
         }
     }
 
@@ -124,6 +123,7 @@ class MainActivity : AppCompatActivity(), MasterCoordinator {
             set_fragment_visibility()
             button_downloads.setTextColor(Color.RED)
             button_downloads.setCompoundDrawableTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")))
+            fragmentMainContainer.show_torrents()
         }
     }
 }

@@ -1,6 +1,5 @@
 package solutions.pundir.godslayer.Downloads.Fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +8,17 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_downloads_main_container.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.DownloadsCoordinator
-import solutions.pundir.godslayer.Downloads.ViewPagerAdapters.ViewPagerAdapterDownloadsMainContainer
+import solutions.pundir.godslayer.Downloads.GodslayerTorrent
+import solutions.pundir.godslayer.Downloads.StateDownloadsMainContainer
+import solutions.pundir.godslayer.Downloads.StateFragmentsDownloads
 import solutions.pundir.godslayer.R
 
 class FragmentDownloadsMainContainer : Fragment(), FragmentDownloadsMainContainerCoordinator {
+    internal var items = mutableListOf<GodslayerTorrent>()
     internal lateinit var callback : DownloadsCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
+    private val fragmentStateDownloadsMainContainer = StateFragmentsDownloads()
+    private val stateDownloadsMainContainer = StateDownloadsMainContainer()
 
     fun callback_from_parent(callback : DownloadsCoordinator, dbHandler : GodslayerDBOpenHelper) {
         this.callback = callback
@@ -27,19 +31,35 @@ class FragmentDownloadsMainContainer : Fragment(), FragmentDownloadsMainContaine
         return v
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val viewPager = fragmentDownloadsMainContainerViewPager
-        if (viewPager != null) {
-            val adapter = fragmentManager?.let { ViewPagerAdapterDownloadsMainContainer(it, dbHandler) }
-            viewPager.adapter = adapter
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentDownloadsTorrents) {
+            stateDownloadsMainContainer.torrents_fragment = childFragment
+            stateDownloadsMainContainer.torrents_fragment.callback_from_parent(this, dbHandler, items)
         }
-        viewPager.setOffscreenPageLimit(2)
-        fragmentDownloadsMainContainerViewPagerHeader.tabIndicatorColor = Color.RED
+        else if (childFragment is FragmentDownloadsTorrentStats) {
+            stateDownloadsMainContainer.torrent_stats_fragment = childFragment
+            stateDownloadsMainContainer.torrent_stats_fragment.callback_from_parent(this, dbHandler, items)
+        }
+    }
+
+    fun set_fragment_visibility() {
+        fragment_layout_downloads_torrents?.visibility = if (fragmentStateDownloadsMainContainer.visibility_torrents) View.VISIBLE else View.GONE
+        fragment_layout_downloads_torrent_stats?.visibility = if (fragmentStateDownloadsMainContainer.visibility_torrent_stats) View.VISIBLE else View.GONE
+    }
+
+    fun show_torrents() {
+        fragmentStateDownloadsMainContainer.show_torrents()
+        set_fragment_visibility()
+    }
+
+    override fun show_torrent_stats(index : Int) {
+        fragmentStateDownloadsMainContainer.show_torrent_stats()
+        set_fragment_visibility()
     }
 
     override fun download_source(mid: Long, rid: Long) {
-        (fragmentDownloadsMainContainerViewPager.adapter as ViewPagerAdapterDownloadsMainContainer).fragmentDownloadsTorrents.download_source(mid, rid)
+        stateDownloadsMainContainer.torrents_fragment.download_source(mid, rid)
     }
 
 }

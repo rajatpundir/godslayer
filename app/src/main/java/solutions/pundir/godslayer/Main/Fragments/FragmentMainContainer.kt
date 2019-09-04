@@ -67,4 +67,8 @@ class FragmentMainContainer : Fragment(), AppCoordinator {
         stateMainContainer.downloads_fragment.download_source(mid, rid)
     }
 
+    fun show_torrents() {
+        stateMainContainer.downloads_fragment.show_torrents()
+    }
+
 }

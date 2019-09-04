@@ -11,11 +11,11 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
+import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrentsQueue
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.R
 
-class RecycleViewAdapterTorrents internal constructor(val context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrents) : RecyclerView.Adapter<RecycleViewAdapterTorrents.DownloadsItemViewHolder>() {
+class RecycleViewAdapterTorrentsQueue internal constructor(val context: Context?, val items: MutableList<GodslayerTorrent>, val parent_fragment : FragmentDownloadsTorrentsQueue) : RecyclerView.Adapter<RecycleViewAdapterTorrentsQueue.DownloadsItemViewHolder>() {
     private val inflater : LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsItemViewHolder {
@@ -44,6 +44,7 @@ class RecycleViewAdapterTorrents internal constructor(val context: Context?, val
 
     override fun onBindViewHolder(holder: DownloadsItemViewHolder, position: Int) {
         holder.initialize_view_holder(items, position)
+        holder.deatilsButton.setOnClickListener { parent_fragment.show_torrent_stats(position)}
     }
 
     class DownloadsItemViewHolder(v : View) : RecyclerView.ViewHolder(v) {
@@ -53,6 +54,7 @@ class RecycleViewAdapterTorrents internal constructor(val context: Context?, val
         val recyclerViewDownloadsTorrentProgressPercentageItem: TextView = v.findViewById(R.id.recycler_view_downloads_torrent_progress_percentage)
         val pauseOrResumeButton : Button = v.findViewById(R.id.button_downloads_torrent_pause_or_resume)
         val removeButton : Button = v.findViewById(R.id.button_downloads_torrent_remove)
+        val deatilsButton : Button = v.findViewById(R.id.button_downloads_torrent_details)
         val downlaodProgressBar : ProgressBar = v.findViewById(R.id.progress_bar_downloads_torrent)
         lateinit var item : GodslayerTorrent
         fun initialize_view_holder(items: MutableList<GodslayerTorrent>, position: Int) {

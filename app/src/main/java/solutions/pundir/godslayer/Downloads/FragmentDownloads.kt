@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_downloads_main_container.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Main.Fragments.AppCoordinator
 import solutions.pundir.godslayer.R
@@ -37,6 +36,10 @@ class FragmentDownloads : Fragment(), DownloadsCoordinator {
 
     fun download_source(mid : Long, rid : Long) {
         fragmentDownloadsMainContainer.download_source(mid, rid)
+    }
+
+    fun show_torrents() {
+        fragmentDownloadsMainContainer.show_torrents()
     }
 
 }

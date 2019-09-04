@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import com.frostwire.jlibtorrent.TorrentHandle
-import com.frostwire.jlibtorrent.TorrentInfo
 import com.masterwok.simpletorrentandroid.TorrentSession
 import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import com.masterwok.simpletorrentandroid.contracts.TorrentSessionListener
@@ -13,9 +12,9 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrents
+import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrentsQueue
 
-class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrents) : TorrentSessionListener{
+class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrentsQueue) : TorrentSessionListener{
     internal var module_id = mid
     internal var source_id = rid
     internal var parent_id : Long = -1
@@ -27,9 +26,12 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     internal var filename = ""
     internal var torrent_progress = 0
     internal var isPaused = false
+    internal var metadata_ready = false
     lateinit var torrentUri : Uri
     lateinit var torrentSessionOptions : TorrentSessionOptions
     lateinit var torrentSession: TorrentSession
+    lateinit var torrent_handle: TorrentHandle
+    lateinit var torrent_session_status : TorrentSessionStatus
     var position  = 0
 
     init {
@@ -64,6 +66,7 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     fun set_torrent_uri_options_and_session() {
+//        magnet_url = "magnet:?xt=urn:btih:TG6PYIMOXOCSLKVLHLHJYWBMYDSAMLJY&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.internetwarriors.net:1337/announce&tr=udp://tracker.leechersparadise.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://mgtracker.org:6969/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://peerfect.org:6969/announce&tr=http://share.camoe.cn:8080/announce&tr=http://t.nyaatracker.com:80/announce&tr=https://open.kickasstracker.com:443/announce"
         torrentUri = Uri.parse(magnet_url)
         torrentSessionOptions = TorrentSessionOptions(
             downloadLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -157,21 +160,11 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
+        metadata_ready = true
+        torrent_handle = torrentHandle
+        torrent_session_status = torrentSessionStatus
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
-        println("---------------------------------------------------------------------------------------")
-        doAsync {
-            filename = torrentHandle.savePath() + "/" + torrentHandle.name()
-            torrent_state = "Metadata received..."
-            uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
-            }
-        }
-    }
-
-    override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
-        println(torrentSessionStatus.progress.toString())
-        println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
         println("torrentHandle.torrentFile().name()")
         println(torrentHandle.torrentFile().name())
@@ -264,6 +257,25 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
             println(i)
             count += 1
         }
+        println("###########################################################")
+        count = 0
+        for (i in 0..(torrentHandle.torrentFile().numFiles() - 1)) {
+            println("Index: " + i.toString() + " " + torrentHandle.torrentFile().files().filePath(i))
+        }
+        println("###########################################################")
+        doAsync {
+            filename = torrentHandle.savePath() + "/" + torrentHandle.name()
+            torrent_state = "Metadata received..."
+            uiThread {
+                parent_fragment.refresh_torrent_in_adapter(position)
+            }
+        }
+    }
+
+    override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
+        println(torrentSessionStatus.progress.toString())
+        println("onPieceFinished")
+        println("---------------------------------------------------------------------------------------")
         doAsync {
             torrent_state = "Downloading..."
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()
