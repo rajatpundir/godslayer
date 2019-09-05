@@ -47,8 +47,13 @@ class ViewPagerAdapterDownloadsTorrentStats internal constructor(fm: FragmentMan
         return name
     }
 
-    fun refresh_torrent_stats(index : Int) {
-//        (fragmentDownloadsTorrentStats as FragmentDownloadsTorrentStatsCoordinator).refresh_torrent_stats(index)
+    fun show_torrent_stats(index : Int) {
+        fragmentDownloadsTorrentStatsDetails.show_torrent_stats(index)
+        fragmentDownloadsTorrentStatsStatus.show_torrent_stats(index)
+        fragmentDownloadsTorrentStatsFiles.show_torrent_stats(index)
+        fragmentDownloadsTorrentStatsTrackers.show_torrent_stats(index)
+        fragmentDownloadsTorrentStatsPeers.show_torrent_stats(index)
+        fragmentDownloadsTorrentStatsPieces.show_torrent_stats(index)
     }
 
 }

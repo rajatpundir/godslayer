@@ -56,6 +56,7 @@ class FragmentDownloadsMainContainer : Fragment(), FragmentDownloadsMainContaine
     override fun show_torrent_stats(index : Int) {
         fragmentStateDownloadsMainContainer.show_torrent_stats()
         set_fragment_visibility()
+        stateDownloadsMainContainer.torrent_stats_fragment.show_torrent_stats(index)
     }
 
     override fun download_source(mid: Long, rid: Long) {

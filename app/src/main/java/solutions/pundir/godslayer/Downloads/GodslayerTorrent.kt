@@ -8,11 +8,13 @@ import com.masterwok.simpletorrentandroid.TorrentSession
 import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import com.masterwok.simpletorrentandroid.contracts.TorrentSessionListener
 import com.masterwok.simpletorrentandroid.models.TorrentSessionStatus
+import kotlinx.android.synthetic.main.fragment_downloads_torrent_stats_status.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrentsQueue
+import solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo.GodslayerTorrentInfo
 
 class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrentsQueue) : TorrentSessionListener{
     internal var module_id = mid
@@ -27,11 +29,10 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     internal var torrent_progress = 0
     internal var isPaused = false
     internal var metadata_ready = false
+    internal val torrent_info = GodslayerTorrentInfo()
     lateinit var torrentUri : Uri
     lateinit var torrentSessionOptions : TorrentSessionOptions
     lateinit var torrentSession: TorrentSession
-    lateinit var torrent_handle: TorrentHandle
-    lateinit var torrent_session_status : TorrentSessionStatus
     var position  = 0
 
     init {
@@ -160,105 +161,44 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
-        metadata_ready = true
-        torrent_handle = torrentHandle
-        torrent_session_status = torrentSessionStatus
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
-        println("torrentHandle.torrentFile().name()")
-        println(torrentHandle.torrentFile().name())
-        println("torrentHandle.torrentFile().numFiles()")
-        println(torrentHandle.torrentFile().numFiles())
-        println("torrentHandle.torrentFile().numPieces()")
-        println(torrentHandle.torrentFile().numPieces())
-        println("torrentHandle.torrentFile().pieceLength()")
-        println(torrentHandle.torrentFile().pieceLength())
-        println("torrentHandle.torrentFile().totalSize()")
-        println(torrentHandle.torrentFile().totalSize())
-        println("torrentHandle.downloadLimit")
-        println(torrentHandle.downloadLimit)
-        println("torrentHandle.uploadLimit")
-        println(torrentHandle.uploadLimit)
+        metadata_ready = true
+        torrent_info.details.torrent_name = torrentHandle.torrentFile().name().toString()
+        torrent_info.details.torrent_storage_path = torrentHandle.swig().status().save_path.toString()
+        torrent_info.details.torrent_number_of_files = torrentHandle.torrentFile().numFiles().toString()
+        torrent_info.details.torrent_total_size = torrentHandle.torrentFile().totalSize().toString()
+        torrent_info.details.torrent_speed_limit_download = torrentHandle.downloadLimit.toString()
+        torrent_info.details.torrent_speed_limit_upload = torrentHandle.uploadLimit.toString()
+        torrent_info.status.torrent_name = torrentHandle.torrentFile().name().toString()
+        torrent_info.status.torrent_downloaded = torrentHandle.swig().status().all_time_download.toString()
+        torrent_info.status.torrent_leechers = torrentHandle.swig().status().list_peers.toString()
+        torrent_info.status.torrent_seeders = torrentHandle.swig().status().list_seeds.toString()
+        torrent_info.status.torrent_uploaded = torrentHandle.swig().status().all_time_upload.toString()
+        torrent_info.status.torrent_active_time = torrentHandle.swig().status()._active_duration.toString()
+        torrent_info.status.torrent_seeding_time = torrentHandle.swig().status()._seeding_duration.toString()
+        torrent_info.status.pieces = torrentHandle.swig().status().verified_pieces.toString() + " / " + torrentHandle.torrentFile().numPieces().toString() + " (" + torrentHandle.torrentFile().pieceLength().toString() + " )"
+        torrent_info.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
+        torrent_info.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
+        torrent_info.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()
+        torrent_info.trackers.announcing_to_dht = torrentHandle.swig().status().announcing_to_dht
+        torrent_info.trackers.announcing_to_lsd = torrentHandle.swig().status().announcing_to_lsd
+        torrent_info.trackers.announcing_to_trackers = torrentHandle.swig().status().announcing_to_trackers
+        torrent_info.pieces.torrent_number_of_pieces = torrentHandle.torrentFile().numPieces().toString()
+        torrent_info.pieces.torrent_piece_size = torrentHandle.torrentFile().pieceLength().toString()
+        torrent_info.pieces.torrent_pieces_downloaded = torrentHandle.swig().status().verified_pieces.toString()
         println("torrentHandle.swig().max_connections()")
         println(torrentHandle.swig().max_connections())
         println("torrentHandle.swig().max_uploads()")
         println(torrentHandle.swig().max_uploads())
-        println("torrentHandle.swig().status()._active_duration")
-        println(torrentHandle.swig().status()._active_duration)
-        println("torrentHandle.swig().status()._finished_duration")
-        println(torrentHandle.swig().status()._finished_duration)
-        println("torrentHandle.swig().status()._last_download")
-        println(torrentHandle.swig().status()._last_download)
-        println("torrentHandle.swig().status()._last_upload")
-        println(torrentHandle.swig().status()._last_upload)
-        println("torrentHandle.swig().status()._next_announce")
-        println(torrentHandle.swig().status()._next_announce)
-        println("torrentHandle.swig().status()._queue_position")
-        println(torrentHandle.swig().status()._queue_position)
-        println("torrentHandle.swig().status()._seeding_duration")
-        println(torrentHandle.swig().status()._seeding_duration)
-        println("torrentHandle.swig().status().added_time")
-        println(torrentHandle.swig().status().added_time)
-        println("torrentHandle.swig().status().all_time_download")
-        println(torrentHandle.swig().status().all_time_download)
-        println("torrentHandle.swig().status().all_time_upload")
-        println(torrentHandle.swig().status().all_time_upload)
-        println("torrentHandle.swig().status().announcing_to_dht")
-        println(torrentHandle.swig().status().announcing_to_dht)
-        println("torrentHandle.swig().status().announcing_to_lsd")
-        println(torrentHandle.swig().status().announcing_to_lsd)
-        println("torrentHandle.swig().status().announcing_to_trackers")
-        println(torrentHandle.swig().status().announcing_to_trackers)
-        println("torrentHandle.swig().status().block_size")
-        println(torrentHandle.swig().status().block_size)
-        println("torrentHandle.swig().status().completed_time")
-        println(torrentHandle.swig().status().completed_time)
-        println("torrentHandle.swig().status().connect_candidates")
-        println(torrentHandle.swig().status().connect_candidates)
-        println("torrentHandle.swig().status().connections_limit")
-        println(torrentHandle.swig().status().connections_limit)
-        println("torrentHandle.swig().status().current_tracker")
-        println(torrentHandle.swig().status().current_tracker)
-        println("torrentHandle.swig().status().list_peers")
-        println(torrentHandle.swig().status().list_peers)
-        println("torrentHandle.swig().status().list_seeds")
-        println(torrentHandle.swig().status().list_seeds)
+        // Maybe use progress PPM to calculate ETA.
         println("torrentHandle.swig().status().progress_ppm")
         println(torrentHandle.swig().status().progress_ppm)
-        println("torrentHandle.swig().status().save_path")
-        println(torrentHandle.swig().status().save_path)
         println("torrentHandle.swig().status().seed_rank")
         println(torrentHandle.swig().status().seed_rank)
-        println("torrentHandle.swig().status().verified_pieces")
-        println(torrentHandle.swig().status().verified_pieces)
-        println("torrentSession.downloadRate")
-        println(torrentSession.downloadRate)
-        println("torrentSession.uploadRate")
-        println(torrentSession.uploadRate)
-        println("torrentHandle.fileProgress()")
-        var count = 0
-        for(i in torrentHandle.fileProgress()) {
-            println(count)
-            println(i)
-            count += 1
-        }
-        println("torrentHandle.filePriorities()")
-        count = 0
-        for(i in torrentHandle.filePriorities()) {
-            println(count)
-            println(i.swig().toString())
-            count += 1
-        }
-        println("torrentHandle.torrentFile().files().paths()")
-        count = 0
-        for( i in torrentHandle.torrentFile().files().paths()) {
-            println(count)
-            println(i)
-            count += 1
-        }
         println("###########################################################")
-        count = 0
+        var count = 0
         for (i in 0..(torrentHandle.torrentFile().numFiles() - 1)) {
             println("Index: " + i.toString() + " " + torrentHandle.torrentFile().files().filePath(i))
         }
@@ -276,6 +216,9 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
+        torrent_info.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
+        torrent_info.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
+        torrent_info.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()
         doAsync {
             torrent_state = "Downloading..."
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()

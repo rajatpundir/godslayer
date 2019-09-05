@@ -16,4 +16,8 @@ class FragmentDownloadsTorrentStatsFiles(val dbHandler: GodslayerDBOpenHelper, v
         return v
     }
 
+    fun show_torrent_stats(index : Int) {
+        println("SOMETHING")
+    }
+
 }

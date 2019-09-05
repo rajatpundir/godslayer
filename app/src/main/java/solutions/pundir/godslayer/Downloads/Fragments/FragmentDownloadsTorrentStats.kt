@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_downloads_torrent_stats.*
-import kotlinx.android.synthetic.main.fragment_downloads_torrents.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Downloads.DownloadsCoordinator
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.Downloads.ViewPagerAdapters.ViewPagerAdapterDownloadsTorrentStats
 import solutions.pundir.godslayer.R
@@ -18,6 +16,7 @@ class FragmentDownloadsTorrentStats : Fragment() {
     internal lateinit var callback : FragmentDownloadsMainContainerCoordinator
     internal lateinit var dbHandler : GodslayerDBOpenHelper
     internal lateinit var items : MutableList<GodslayerTorrent>
+    internal lateinit var adapter : ViewPagerAdapterDownloadsTorrentStats
 
     fun callback_from_parent(callback : FragmentDownloadsMainContainerCoordinator, dbHandler : GodslayerDBOpenHelper, items : MutableList<GodslayerTorrent>) {
         this.callback = callback
@@ -34,11 +33,16 @@ class FragmentDownloadsTorrentStats : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (fragmentDownloadsTorrentStatsViewPager != null) {
-            val adapter = fragmentManager?.let { ViewPagerAdapterDownloadsTorrentStats(it, dbHandler, items) }
+            this.adapter = fragmentManager?.let { ViewPagerAdapterDownloadsTorrentStats(it, dbHandler, items) }!!
             fragmentDownloadsTorrentStatsViewPager.adapter = adapter
         }
         fragmentDownloadsTorrentStatsViewPager.setOffscreenPageLimit(6)
         fragmentDownloadsTorrentStatsViewPagerHeader.tabIndicatorColor = Color.RED
+        fragmentDownloadsTorrentStatsViewPager.currentItem = 1
+    }
+
+    fun show_torrent_stats(index : Int) {
+        this.adapter.show_torrent_stats(index)
     }
 
 }

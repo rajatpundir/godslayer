@@ -43,14 +43,19 @@
                 android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Library.FragmentLibrary"
                 android:id="@+id/fragment_library" tools:layout="@layout/fragment_library"/>
     </LinearLayout>
+
     <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/fragment_layout_downloads"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_layout_downloads"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
         <fragment
+                android:id="@+id/fragment_downloads"
+                android:name="solutions.pundir.godslayer.Downloads.FragmentDownloads"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="solutions.pundir.godslayer.Downloads.FragmentDownloads"
-                android:id="@+id/fragment_downloads" tools:layout="@layout/fragment_downloads"/>
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_downloads" />
     </LinearLayout>
 </LinearLayout>
