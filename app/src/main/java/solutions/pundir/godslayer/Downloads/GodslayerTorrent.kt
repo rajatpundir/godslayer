@@ -8,7 +8,6 @@ import com.masterwok.simpletorrentandroid.TorrentSession
 import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import com.masterwok.simpletorrentandroid.contracts.TorrentSessionListener
 import com.masterwok.simpletorrentandroid.models.TorrentSessionStatus
-import kotlinx.android.synthetic.main.fragment_downloads_torrent_stats_status.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
@@ -161,33 +160,11 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
+        metadata_ready = true
+        torrent_info.set_stats(torrentHandle, torrentSessionStatus)
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
-        metadata_ready = true
-        torrent_info.details.torrent_name = torrentHandle.torrentFile().name().toString()
-        torrent_info.details.torrent_storage_path = torrentHandle.swig().status().save_path.toString()
-        torrent_info.details.torrent_number_of_files = torrentHandle.torrentFile().numFiles().toString()
-        torrent_info.details.torrent_total_size = torrentHandle.torrentFile().totalSize().toString()
-        torrent_info.details.torrent_speed_limit_download = torrentHandle.downloadLimit.toString()
-        torrent_info.details.torrent_speed_limit_upload = torrentHandle.uploadLimit.toString()
-        torrent_info.status.torrent_name = torrentHandle.torrentFile().name().toString()
-        torrent_info.status.torrent_downloaded = torrentHandle.swig().status().all_time_download.toString()
-        torrent_info.status.torrent_leechers = torrentHandle.swig().status().list_peers.toString()
-        torrent_info.status.torrent_seeders = torrentHandle.swig().status().list_seeds.toString()
-        torrent_info.status.torrent_uploaded = torrentHandle.swig().status().all_time_upload.toString()
-        torrent_info.status.torrent_active_time = torrentHandle.swig().status()._active_duration.toString()
-        torrent_info.status.torrent_seeding_time = torrentHandle.swig().status()._seeding_duration.toString()
-        torrent_info.status.pieces = torrentHandle.swig().status().verified_pieces.toString() + " / " + torrentHandle.torrentFile().numPieces().toString() + " (" + torrentHandle.torrentFile().pieceLength().toString() + " )"
-        torrent_info.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
-        torrent_info.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
-        torrent_info.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()
-        torrent_info.trackers.announcing_to_dht = torrentHandle.swig().status().announcing_to_dht
-        torrent_info.trackers.announcing_to_lsd = torrentHandle.swig().status().announcing_to_lsd
-        torrent_info.trackers.announcing_to_trackers = torrentHandle.swig().status().announcing_to_trackers
-        torrent_info.pieces.torrent_number_of_pieces = torrentHandle.torrentFile().numPieces().toString()
-        torrent_info.pieces.torrent_piece_size = torrentHandle.torrentFile().pieceLength().toString()
-        torrent_info.pieces.torrent_pieces_downloaded = torrentHandle.swig().status().verified_pieces.toString()
         println("torrentHandle.swig().max_connections()")
         println(torrentHandle.swig().max_connections())
         println("torrentHandle.swig().max_uploads()")
@@ -213,17 +190,16 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
+        torrent_info.set_stats(torrentHandle, torrentSessionStatus)
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
-        torrent_info.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
-        torrent_info.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
-        torrent_info.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()
         doAsync {
             torrent_state = "Downloading..."
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()
             uiThread {
                 parent_fragment.refresh_torrent_in_adapter(position)
+                torrent_info.refresh_torrent_stats()
             }
         }
     }

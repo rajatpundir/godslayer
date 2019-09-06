@@ -6,8 +6,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.Fragments.*
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
+import solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo.GodslayerTorrentInfoListener
 
-class ViewPagerAdapterDownloadsTorrentStats internal constructor(fm: FragmentManager, val dbHandler: GodslayerDBOpenHelper, var items : MutableList<GodslayerTorrent>) : FragmentPagerAdapter(fm) {
+class ViewPagerAdapterDownloadsTorrentStats internal constructor(fm: FragmentManager, val dbHandler: GodslayerDBOpenHelper, var items : MutableList<GodslayerTorrent>) : FragmentPagerAdapter(fm), GodslayerTorrentInfoListener {
 
     private val COUNT = 6
     val fragmentDownloadsTorrentStatsDetails = FragmentDownloadsTorrentStatsDetails(dbHandler, items)
@@ -16,6 +17,7 @@ class ViewPagerAdapterDownloadsTorrentStats internal constructor(fm: FragmentMan
     val fragmentDownloadsTorrentStatsTrackers = FragmentDownloadsTorrentStatsTrackers(dbHandler, items)
     val fragmentDownloadsTorrentStatsPeers = FragmentDownloadsTorrentStatsPeers(dbHandler, items)
     val fragmentDownloadsTorrentStatsPieces = FragmentDownloadsTorrentStatsPieces(dbHandler, items)
+    var index = -1
 
     override fun getItem(position: Int): Fragment? {
         var fragment: Fragment? = null
@@ -48,12 +50,27 @@ class ViewPagerAdapterDownloadsTorrentStats internal constructor(fm: FragmentMan
     }
 
     fun show_torrent_stats(index : Int) {
+        if (this.index != -1) {
+            items[this.index].torrent_info.refresh_torrent_stats_flag = false
+        }
+        this.index = index
+        items[this.index].torrent_info.refresh_stats_callback = this
+        items[this.index].torrent_info.refresh_torrent_stats_flag = true
         fragmentDownloadsTorrentStatsDetails.show_torrent_stats(index)
         fragmentDownloadsTorrentStatsStatus.show_torrent_stats(index)
         fragmentDownloadsTorrentStatsFiles.show_torrent_stats(index)
         fragmentDownloadsTorrentStatsTrackers.show_torrent_stats(index)
         fragmentDownloadsTorrentStatsPeers.show_torrent_stats(index)
         fragmentDownloadsTorrentStatsPieces.show_torrent_stats(index)
+    }
+
+    override fun refresh_torrent_stats() {
+        fragmentDownloadsTorrentStatsDetails.refresh_torrent_stats()
+        fragmentDownloadsTorrentStatsStatus.refresh_torrent_stats()
+        fragmentDownloadsTorrentStatsFiles.refresh_torrent_stats()
+        fragmentDownloadsTorrentStatsTrackers.refresh_torrent_stats()
+        fragmentDownloadsTorrentStatsPeers.refresh_torrent_stats()
+        fragmentDownloadsTorrentStatsPieces.refresh_torrent_stats()
     }
 
 }

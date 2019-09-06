@@ -1,7 +1,6 @@
 package solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo
 
 class GodslayerTorrentInfoDetails {
-    var torrent_name = ""
     var torrent_storage_path = ""
     var torrent_total_size = ""
     var torrent_number_of_files = ""

@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_downloads_torrent_stats_details.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.R
 
 class FragmentDownloadsTorrentStatsDetails(val dbHandler: GodslayerDBOpenHelper, var items : MutableList<GodslayerTorrent>) : Fragment() {
+    internal var index = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_downloads_torrent_stats_details, container, false)
@@ -17,7 +19,15 @@ class FragmentDownloadsTorrentStatsDetails(val dbHandler: GodslayerDBOpenHelper,
     }
 
     fun show_torrent_stats(index : Int) {
-        println("SOMETHING")
+        this.index = index
+        refresh_torrent_stats()
+    }
+
+    fun refresh_torrent_stats() {
+        val torrent_info = items[this.index].torrent_info
+        torrentStoragePath.text = torrent_info.details.torrent_storage_path
+        torrentTotalSize.text = torrent_info.details.torrent_total_size
+        torrentNumFiles.text = torrent_info.details.torrent_number_of_files
     }
 
 }

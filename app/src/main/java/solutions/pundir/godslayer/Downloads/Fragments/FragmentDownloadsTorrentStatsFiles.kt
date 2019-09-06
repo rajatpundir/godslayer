@@ -10,6 +10,7 @@ import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.R
 
 class FragmentDownloadsTorrentStatsFiles(val dbHandler: GodslayerDBOpenHelper, var items : MutableList<GodslayerTorrent>) : Fragment() {
+    internal var index = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_downloads_torrent_stats_files, container, false)
@@ -17,7 +18,12 @@ class FragmentDownloadsTorrentStatsFiles(val dbHandler: GodslayerDBOpenHelper, v
     }
 
     fun show_torrent_stats(index : Int) {
-        println("SOMETHING")
+        this.index = index
+        refresh_torrent_stats()
+    }
+
+    fun refresh_torrent_stats() {
+        val torrent_info = items[this.index].torrent_info
     }
 
 }
