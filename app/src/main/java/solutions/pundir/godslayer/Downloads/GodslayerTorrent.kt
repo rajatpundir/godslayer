@@ -161,7 +161,6 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
         metadata_ready = true
-        torrent_info.set_stats(torrentHandle, torrentSessionStatus)
         println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
@@ -174,23 +173,20 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println(torrentHandle.swig().status().progress_ppm)
         println("torrentHandle.swig().status().seed_rank")
         println(torrentHandle.swig().status().seed_rank)
-        println("###########################################################")
-        var count = 0
-        for (i in 0..(torrentHandle.torrentFile().numFiles() - 1)) {
-            println("Index: " + i.toString() + " " + torrentHandle.torrentFile().files().filePath(i))
-        }
-        println("###########################################################")
         doAsync {
             filename = torrentHandle.savePath() + "/" + torrentHandle.name()
             torrent_state = "Metadata received..."
             uiThread {
                 parent_fragment.refresh_torrent_in_adapter(position)
+                for (i in 0..(torrentHandle.torrentFile().numFiles() - 1)) {
+                    torrent_info.files.files.add(torrentHandle.torrentFile().files().filePath(i))
+                }
+                torrent_info.set_stats(torrentHandle, torrentSessionStatus)
             }
         }
     }
 
     override fun onPieceFinished(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
-        torrent_info.set_stats(torrentHandle, torrentSessionStatus)
         println(torrentSessionStatus.progress.toString())
         println("onPieceFinished")
         println("---------------------------------------------------------------------------------------")
@@ -199,7 +195,7 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()
             uiThread {
                 parent_fragment.refresh_torrent_in_adapter(position)
-                torrent_info.refresh_torrent_stats()
+                torrent_info.set_stats(torrentHandle, torrentSessionStatus)
             }
         }
     }

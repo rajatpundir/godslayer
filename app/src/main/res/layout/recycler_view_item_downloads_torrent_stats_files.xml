@@ -3,9 +3,8 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_downloads_torrent_stats_files"
+    <TextView
+            android:id="@+id/recycler_view_item_downloads_torrent_stats_filename"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="wrap_content" />
 </LinearLayout>

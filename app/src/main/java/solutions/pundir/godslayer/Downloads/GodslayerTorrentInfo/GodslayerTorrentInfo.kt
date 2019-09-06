@@ -23,13 +23,13 @@ class GodslayerTorrentInfo {
         this.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
         this.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
         this.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()
-        this.status.torrent_downloaded = torrentHandle.swig().status().all_time_download.toString()
+        this.status.torrent_downloaded = (torrentHandle.swig().status().all_time_download.toInt() / 1024).toString() + " KB"
         this.status.torrent_leechers = torrentHandle.swig().status().list_peers.toString()
         this.status.torrent_seeders = torrentHandle.swig().status().list_seeds.toString()
-        this.status.torrent_uploaded = torrentHandle.swig().status().all_time_upload.toString()
+        this.status.torrent_uploaded = (torrentHandle.swig().status().all_time_upload.toInt() / 1024).toString() + " KB"
         this.status.torrent_active_time = torrentHandle.swig().status()._active_duration.toString()
         this.status.torrent_seeding_time = torrentHandle.swig().status()._seeding_duration.toString()
-        this.status.pieces = torrentHandle.swig().status().verified_pieces.toString() + " / " + torrentHandle.torrentFile().numPieces().toString() + " (" + torrentHandle.torrentFile().pieceLength().toString() + " )"
+        this.status.pieces = torrentHandle.swig().status().verified_pieces.count().toString() + " / " + torrentHandle.torrentFile().numPieces().toString() + " (" + (torrentHandle.torrentFile().pieceLength() / 1024).toString() + " KB)"
         this.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
         this.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"
         this.status.torrent_progress = (torrentSessionStatus.progress * 100).toInt()

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_downloads_torrent_stats_status.*
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
 import solutions.pundir.godslayer.Downloads.GodslayerTorrent
-import solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo.GodslayerTorrentInfoListener
 import solutions.pundir.godslayer.R
 
 class FragmentDownloadsTorrentStatsStatus(val dbHandler: GodslayerDBOpenHelper, var items : MutableList<GodslayerTorrent>) : Fragment() {
