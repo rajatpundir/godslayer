@@ -4,23 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.masterwok.simpletorrentandroid.TorrentSession
-import com.masterwok.simpletorrentandroid.TorrentSessionOptions
 import kotlinx.android.synthetic.main.fragment_bottom_bar.*
 import kotlinx.android.synthetic.main.fragment_main_container.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Downloads.GodslayerTorrent
 import solutions.pundir.godslayer.Main.Fragments.FragmentMainContainer
 import solutions.pundir.godslayer.R
 
@@ -72,12 +63,12 @@ class MainActivity : AppCompatActivity(), MasterCoordinator {
     fun set_fragment_visibility() {
         button_home.setTextColor(Color.WHITE)
         button_subscriptions.setTextColor(Color.WHITE)
-        button_inbox.setTextColor(Color.WHITE)
+        button_trending.setTextColor(Color.WHITE)
         button_library.setTextColor(Color.WHITE)
         button_downloads.setTextColor(Color.WHITE)
         button_home.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_subscriptions.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
-        button_inbox.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
+        button_trending.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_library.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_downloads.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         fragment_layout_home?.visibility = if (fragmentStateApp.visibility_home) View.VISIBLE else View.GONE
@@ -91,7 +82,7 @@ class MainActivity : AppCompatActivity(), MasterCoordinator {
         button_home.setTextColor(Color.RED)
         button_home.setCompoundDrawableTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")))
         button_subscriptions.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
-        button_inbox.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
+        button_trending.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_library.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_downloads.setCompoundDrawableTintList(ColorStateList.valueOf(Color.LTGRAY))
         button_home.setOnClickListener {
@@ -106,11 +97,11 @@ class MainActivity : AppCompatActivity(), MasterCoordinator {
             button_subscriptions.setTextColor(Color.RED)
             button_subscriptions.setCompoundDrawableTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")))
         }
-        button_inbox.setOnClickListener {
+        button_trending.setOnClickListener {
             fragmentStateApp.show_inbox()
             set_fragment_visibility()
-            button_inbox.setTextColor(Color.RED)
-            button_inbox.setCompoundDrawableTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")))
+            button_trending.setTextColor(Color.RED)
+            button_trending.setCompoundDrawableTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")))
         }
         button_library.setOnClickListener {
             fragmentStateApp.show_library()

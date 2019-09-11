@@ -33,8 +33,10 @@ class FragmentDownloadsTorrentStatsFiles(val dbHandler: GodslayerDBOpenHelper, v
     fun show_torrent_stats(index : Int) {
         this.index = index
         var count = 0
+        files.clear()
         for (i in items[index].torrent_info.files.files) {
-            files.add("INDEX : " + count.toString() + "\n\n" + i)
+            files.add("INDEX : " + count.toString() + "" +
+                    " \n" + i)
             count += 1
         }
         adapter.notifyDataSetChanged()

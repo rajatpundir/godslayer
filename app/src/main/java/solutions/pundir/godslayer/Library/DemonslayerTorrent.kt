@@ -1,4 +1,4 @@
-package solutions.pundir.godslayer.Downloads
+package solutions.pundir.godslayer.Library
 
 import android.content.Context
 import android.net.Uri
@@ -11,20 +11,10 @@ import com.masterwok.simpletorrentandroid.models.TorrentSessionStatus
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
-import solutions.pundir.godslayer.Database.GodslayerDBOpenHelper
-import solutions.pundir.godslayer.Downloads.Fragments.FragmentDownloadsTorrentsQueue
 import solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo.GodslayerTorrentInfo
 
-class GodslayerTorrent internal constructor(val context: Context, val dbHandler: GodslayerDBOpenHelper, val mid: Long, val rid: Long, val parent_fragment : FragmentDownloadsTorrentsQueue) : TorrentSessionListener{
-    internal var module_id = mid
-    internal var source_id = rid
-    internal var parent_id : Long = -1
-    internal var source_name = ""
-    internal var episode_name = ""
-    internal var magnet_link_id : Long = -1
-    internal var magnet_url = ""
+class DemonslayerTorrent internal constructor(val context: Context, val magnet_url : String, val parent_fragment : FragmentLibrary) : TorrentSessionListener{
     internal var torrent_state = "Downloading metadata..."
-    internal var filename = ""
     internal var torrent_progress = 0
     internal var isPaused = false
     internal var metadata_ready = false
@@ -35,47 +25,23 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     var position  = 0
 
     init {
-        get_magnet_link()
+        set_torrent_uri_options_and_session()
     }
 
     fun callback_from_parent_fragment(position : Int) {
         this.position = position
     }
 
-    fun get_magnet_link() {
-        doAsync {
-            var cursor = dbHandler.getMagnetLinkIdFromSourceId(module_id, source_id)
-            cursor!!.moveToFirst()
-            parent_id = cursor.getString(cursor.getColumnIndex("PARENT_ID")).toLong()
-            magnet_link_id = cursor.getString(cursor.getColumnIndex("MAGNET_LINK_ID")).toLong()
-            source_name = cursor.getString(cursor.getColumnIndex("NAME"))
-            cursor.close()
-            cursor = dbHandler.getMagnetLink(mid, magnet_link_id)
-            cursor!!.moveToFirst()
-            magnet_url = cursor.getString(cursor.getColumnIndex("MAGNET_URL")).trim()
-            cursor.close()
-            cursor = dbHandler.getEpisode(module_id, parent_id)
-            cursor!!.moveToFirst()
-            episode_name = cursor.getString(cursor.getColumnIndex("NAME"))
-            cursor.close()
-            uiThread {
-                context?.toast("Starting " + episode_name + " - " + source_name)
-            }
-            set_torrent_uri_options_and_session()
-        }
-    }
-
     fun set_torrent_uri_options_and_session() {
-        magnet_url = "magnet:?xt=urn:btih:e0189ca2b5b223ee75383f6be84f516395760001&dn=node-1&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.internetwarriors.net%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=http%3a%2f%2ft.nyaatracker.com%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969%2fannounce&tr=udp%3a%2f%2fpeerfect.org%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fmgtracker.org%3a6969%2fannounce&tr=http%3a%2f%2fshare.camoe.cn%3a8080%2fannounce&tr=udp%3a%2f%2fp4p.arenabg.com%3a1337%2fannounce&tr=udp%3a%2f%2ftracker.leechersparadise.org%3a6969%2fannounce&tr=https%3a%2f%2fopen.kickasstracker.com%3a443%2fannounce"
         torrentUri = Uri.parse(magnet_url)
         torrentSessionOptions = TorrentSessionOptions(
             downloadLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             , onlyDownloadLargestFile = false
             , enableLogging = false
-            , shouldStream = false
+            , shouldStream = true
         )
         torrentSession = TorrentSession(torrentSessionOptions)
-        torrentSession.listener = this@GodslayerTorrent
+        torrentSession.listener = this@DemonslayerTorrent
         doAsync {
             uiThread {
                 context?.toast("Starting")
@@ -114,7 +80,7 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
     }
 
     fun stop_session() {
-        parent_fragment.remove_torrent_and_update_adapter(module_id, source_id)
+//        parent_fragment.remove_torrent_and_update_adapter(module_id, source_id)
         doAsync {
             torrentSession.stop()
             uiThread {
@@ -174,7 +140,6 @@ class GodslayerTorrent internal constructor(val context: Context, val dbHandler:
         println("torrentHandle.swig().status().seed_rank")
         println(torrentHandle.swig().status().seed_rank)
         doAsync {
-            filename = torrentHandle.savePath() + "/" + torrentHandle.name()
             torrent_state = "Metadata received..."
             uiThread {
                 parent_fragment.refresh_torrent_in_adapter(position)

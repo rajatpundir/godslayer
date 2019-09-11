@@ -21,16 +21,17 @@
             android:textSize="10sp" />
 
     <Button
-            android:id="@+id/button_inbox"
+            android:id="@+id/button_trending"
             style="@android:style/Widget.Material.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_trending"
             android:minLines="1"
-            android:text="@string/inbox"
+            android:text="@string/trending"
             android:textAllCaps="false"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:visibility="gone" />
 
     <Button
             android:id="@+id/button_subscriptions"
@@ -43,7 +44,8 @@
             android:text="@string/subscriptions"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:visibility="gone" />
 
     <Button
             android:id="@+id/button_downloads"
