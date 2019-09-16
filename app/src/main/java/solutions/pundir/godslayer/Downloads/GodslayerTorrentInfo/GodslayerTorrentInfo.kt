@@ -19,6 +19,7 @@ class GodslayerTorrentInfo {
         this.details.torrent_total_size = torrentHandle.torrentFile().totalSize().toString()
         this.details.torrent_speed_limit_download = torrentHandle.downloadLimit.toString()
         this.details.torrent_speed_limit_upload = torrentHandle.uploadLimit.toString()
+        this.details.torrent_hash = torrentHandle.infoHash().toString()
         this.status.torrent_name = torrentHandle.torrentFile().name().toString()
         this.status.torrent_download_speed = (torrentHandle.status().downloadRate() / 1024).toString() + " KB/s"
         this.status.torrent_upload_speed = (torrentHandle.status().uploadRate() / 1024).toString() + " KB/s"

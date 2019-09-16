@@ -22,10 +22,4 @@ class FragmentLibrary  : Fragment(), LibraryCoordinator {
         }
     }
 
-    fun refresh_torrent_in_adapter(position : Int) {
-    }
-
-    fun remove_torrent_and_update_adapter(mid : Long, rid : Long) {
-    }
-
 }

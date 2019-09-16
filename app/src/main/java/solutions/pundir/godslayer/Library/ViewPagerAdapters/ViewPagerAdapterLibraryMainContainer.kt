@@ -3,12 +3,12 @@ package solutions.pundir.godslayer.Library.ViewPagerAdapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import solutions.pundir.godslayer.Library.DemonslayerTorrent
+import solutions.pundir.godslayer.Library.Demonchain
 import solutions.pundir.godslayer.Library.Fragments.FragmentLibraryChainStats
 import solutions.pundir.godslayer.Library.Fragments.FragmentsLibraryChains
 import solutions.pundir.godslayer.Library.Fragments.FragmentsLibraryMainContainer
 
-class ViewPagerAdapterLibraryMainContainer internal constructor(fm: FragmentManager, val callback : FragmentsLibraryMainContainer, var items : MutableList<DemonslayerTorrent>) : FragmentPagerAdapter(fm) {
+class ViewPagerAdapterLibraryMainContainer internal constructor(fm: FragmentManager, val callback : FragmentsLibraryMainContainer, var items : MutableList<Demonchain>) : FragmentPagerAdapter(fm) {
 
     private val COUNT = 2
     val fragmentLibraryChains = FragmentsLibraryChains(items)

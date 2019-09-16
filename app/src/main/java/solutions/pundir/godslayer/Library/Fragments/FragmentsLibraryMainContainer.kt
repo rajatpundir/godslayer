@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_library_main_container.*
-import solutions.pundir.godslayer.Library.DemonslayerTorrent
+import solutions.pundir.godslayer.Library.Demonchain
 import solutions.pundir.godslayer.Library.LibraryCoordinator
 import solutions.pundir.godslayer.Library.ViewPagerAdapters.ViewPagerAdapterLibraryMainContainer
 import solutions.pundir.godslayer.R
 
 class FragmentsLibraryMainContainer : Fragment() {
     internal lateinit var callback : LibraryCoordinator
-    internal var items = mutableListOf<DemonslayerTorrent>()
+    internal var items = mutableListOf<Demonchain>()
 
     fun callback_from_parent(callback : LibraryCoordinator) {
         this.callback = callback

@@ -13,7 +13,8 @@ import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import solutions.pundir.godslayer.Downloads.GodslayerTorrentInfo.GodslayerTorrentInfo
 
-class DemonslayerTorrent internal constructor(val context: Context, val magnet_url : String, val parent_fragment : FragmentLibrary) : TorrentSessionListener{
+class DemonslayerTorrent internal constructor(val context: Context, val magnet_url : String, val parent_chain : Demonchain) : TorrentSessionListener{
+    internal var previous_node_url = null
     internal var torrent_state = "Downloading metadata..."
     internal var torrent_progress = 0
     internal var isPaused = false
@@ -28,7 +29,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         set_torrent_uri_options_and_session()
     }
 
-    fun callback_from_parent_fragment(position : Int) {
+    fun callback_from_parent(position : Int) {
         this.position = position
     }
 
@@ -38,8 +39,10 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
             downloadLocation = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             , onlyDownloadLargestFile = false
             , enableLogging = false
-            , shouldStream = true
+            , shouldStream = false
         )
+        println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath)
         torrentSession = TorrentSession(torrentSessionOptions)
         torrentSession.listener = this@DemonslayerTorrent
         doAsync {
@@ -61,7 +64,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
                     isPaused = true
                     torrentSession.pause()
                     torrent_state = "Paused"
-                    parent_fragment.refresh_torrent_in_adapter(position)
+                    parent_chain.refresh_torrent_in_adapter(position)
                     uiThread {
                         context?.toast("Paused")
                     }
@@ -70,7 +73,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
                     isPaused = false
                     torrentSession.resume()
                     torrent_state = "Downloading..."
-                    parent_fragment.refresh_torrent_in_adapter(position)
+                    parent_chain.refresh_torrent_in_adapter(position)
                     uiThread {
                         context?.toast("Resumed")
                     }
@@ -80,7 +83,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
     }
 
     fun stop_session() {
-//        parent_fragment.remove_torrent_and_update_adapter(module_id, source_id)
+//        parent_chain.remove_torrent_and_update_adapter(module_id, source_id)
         doAsync {
             torrentSession.stop()
             uiThread {
@@ -96,7 +99,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Downloading..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -108,7 +111,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Block Uploaded..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -120,29 +123,19 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Failed to get metadata..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
 
     override fun onMetadataReceived(torrentHandle: TorrentHandle, torrentSessionStatus: TorrentSessionStatus) {
-        metadata_ready = true
-        println(torrentSessionStatus.progress.toString())
         println("onMetadataReceived")
         println("---------------------------------------------------------------------------------------")
-        println("torrentHandle.swig().max_connections()")
-        println(torrentHandle.swig().max_connections())
-        println("torrentHandle.swig().max_uploads()")
-        println(torrentHandle.swig().max_uploads())
-        // Maybe use progress PPM to calculate ETA.
-        println("torrentHandle.swig().status().progress_ppm")
-        println(torrentHandle.swig().status().progress_ppm)
-        println("torrentHandle.swig().status().seed_rank")
-        println(torrentHandle.swig().status().seed_rank)
         doAsync {
             torrent_state = "Metadata received..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
+                metadata_ready = true
                 for (i in 0..(torrentHandle.torrentFile().numFiles() - 1)) {
                     torrent_info.files.files.add(torrentHandle.torrentFile().files().filePath(i))
                 }
@@ -159,7 +152,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
             torrent_state = "Downloading..."
             torrent_progress = (torrentSessionStatus.progress * 100).toInt()
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
                 torrent_info.set_stats(torrentHandle, torrentSessionStatus)
             }
         }
@@ -172,7 +165,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Torrent Delete Failed..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -184,7 +177,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Torrent Deleted..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -209,7 +202,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Paused"
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -221,7 +214,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Torrent Removed..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
@@ -233,7 +226,7 @@ class DemonslayerTorrent internal constructor(val context: Context, val magnet_u
         doAsync {
             torrent_state = "Downloading..."
             uiThread {
-                parent_fragment.refresh_torrent_in_adapter(position)
+                parent_chain.refresh_torrent_in_adapter(position)
             }
         }
     }
