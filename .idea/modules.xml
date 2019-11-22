@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-godslayer.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-godslayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/godslayer.iml" filepath="$PROJECT_DIR$/.idea/godslayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/godslayer-app.iml" filepath="$PROJECT_DIR$/app/godslayer-app.iml" />
     </modules>
   </component>
 </project>
